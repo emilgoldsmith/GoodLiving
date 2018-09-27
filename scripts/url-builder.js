@@ -1,5 +1,4 @@
 const inquirer = require("inquirer");
-const urlencode = require("urlencode");
 
 main();
 
@@ -81,8 +80,6 @@ async function getAirbnbUrl() {
   ]);
 
   const baseUrl = "https://www.airbnb.ae/s/homes";
-  const queryString = urlencode(
-    `map_toggle=true&search_by_map=true&sw_lat=${swLat}&sw_lng=${swLong}&ne_lat=${neLat}&ne_lng=${neLong}&price_max=${maxPrice}&price_min=${minPrice}`
-  );
+  const queryString = `map_toggle=true&search_by_map=true&sw_lat=${swLat}&sw_lng=${swLong}&ne_lat=${neLat}&ne_lng=${neLong}&price_max=${maxPrice}&price_min=${minPrice}`;
   return `${baseUrl}?${queryString}`;
 }
