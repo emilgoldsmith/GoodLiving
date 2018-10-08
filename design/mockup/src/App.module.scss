@@ -8,16 +8,53 @@
   background-size: cover;
 }
 
+.topContainer {
+  display: flex;
+  padding-top: 3vh;
+}
+
 .mainInput {
-  margin-top: 3vh;
-  margin-left: 3vw;
+  align-self: center;
+  margin: 0 3vw;
   padding: 10px;
   border: solid darkgrey;
   background: rgba(255, 255, 255, 0.7);
   color: darkgrey;
   font-size: 2.5vh;
   border-radius: 15px;
+  max-height: 3vh;
   &:focus {
     outline: none;
+  }
+}
+
+.preferencesContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.preference {
+  padding: 10px;
+  background: lightgrey;
+  margin: 3px;
+  border-radius: 10px;
+}
+
+/** Taken from https://codepen.io/terkel/pen/dvejH */
+.unstyledButton {
+  user-select: none;
+  padding: 0;
+  overflow: visible;
+  line-height: normal;
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  box-sizing: content-box;
+  cursor: pointer;
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
   }
 }
