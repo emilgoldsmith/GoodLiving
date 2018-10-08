@@ -14,8 +14,8 @@
 }
 
 .mainInput {
-  align-self: center;
   margin: 0 3vw;
+  margin-top: 10px;
   padding: 10px;
   border: solid darkgrey;
   background: rgba(255, 255, 255, 0.7);
@@ -32,11 +32,12 @@
   flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .preference {
   padding: 10px;
-  background: lightgrey;
+  background: #cac9c9;
   margin: 3px;
   border-radius: 10px;
 }
@@ -57,4 +58,11 @@
     border: 0;
     padding: 0;
   }
+}
+
+.iconContainer {
+  display: inline;
+  background-color: orange;
+  padding: 3px;
+  border-radius: 4px;
 }

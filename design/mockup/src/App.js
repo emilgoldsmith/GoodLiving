@@ -13,9 +13,12 @@ class App extends Component {
               placeholder="What are your preferences?"
             />
             <div className={styles.preferencesContainer}>
-              {new Array(20).fill(0).map(_i => (
+              {new Array(8).fill(0).map(_i => (
                 <div key={x++} className={styles.preference}>
-                  Some Preference{" "}
+                  <div className={`${styles.iconContainer} ${styles.gymIcon}`}>
+                    <i className="fas fa-dumbbell" />
+                  </div>{" "}
+                  Gym Nearby{" "}
                   <button className={styles.unstyledButton}>
                     <i className="fas fa-times" />
                   </button>
