@@ -11,7 +11,7 @@ class App extends Component {
             <div className={styles.inputContainer}>
               <input
                 className={styles.mainInput}
-                placeholder="What are your preferences?"
+                placeholder="What are you looking for?"
               />
               <div className={styles.suggestion}>Select Location</div>
               <div className={styles.suggestion}>Select Price Range</div>
