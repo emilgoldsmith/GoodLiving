@@ -1,11 +1,28 @@
-.app,
-.background {
+.appContainer {
   height: 100%;
   width: 100%;
+  display: grid;
+  grid-template-columns: auto 200px;
+  grid-template-rows: auto;
+  grid-template-areas: "map sidebar";
+}
+
+.map {
+  grid-area: "map";
   background-image: url("./map-background.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.sidebarContainer {
+  grid-area: "sidebar";
+  background-color: rgb(245, 245, 245);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  > * {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
 
 .topContainer {
@@ -46,18 +63,19 @@
   }
 }
 
-.preferencesContainer {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
 .preference {
   padding: 10px;
   background: #cac9c9;
-  margin: 3px;
+  margin-bottom: 15px;
   border-radius: 10px;
+
+  button {
+    float: right;
+  }
+
+  .iconContainer {
+    margin-right: 6px;
+  }
 }
 
 /** Taken from https://codepen.io/terkel/pen/dvejH */
