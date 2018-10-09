@@ -13,9 +13,14 @@
   padding-top: 3vh;
 }
 
-.mainInput {
+.inputContainer {
   margin: 0 3vw;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainInput {
   padding: 10px;
   border: solid darkgrey;
   background: rgba(255, 255, 255, 0.7);
@@ -25,6 +30,19 @@
   max-height: 3vh;
   &:focus {
     outline: none;
+  }
+}
+
+.suggestion {
+  padding: 10px;
+  background: #d2d2d2;
+  margin: 3px;
+  border-radius: 10px;
+  flex-grow: 0;
+  align-self: flex-start;
+  cursor: pointer;
+  &:hover {
+    background: #cac9c9;
   }
 }
 
@@ -62,7 +80,10 @@
 
 .iconContainer {
   display: inline;
-  background-color: orange;
   padding: 3px;
   border-radius: 4px;
+}
+
+.gymIcon {
+  background-color: orange;
 }

@@ -8,10 +8,14 @@ class App extends Component {
       <div className={styles.app}>
         <div className={styles.background}>
           <div className={styles.topContainer}>
-            <input
-              className={styles.mainInput}
-              placeholder="What are your preferences?"
-            />
+            <div className={styles.inputContainer}>
+              <input
+                className={styles.mainInput}
+                placeholder="What are your preferences?"
+              />
+              <div className={styles.suggestion}>Select Location</div>
+              <div className={styles.suggestion}>Select Price Range</div>
+            </div>
             <div className={styles.preferencesContainer}>
               {new Array(8).fill(0).map(_i => (
                 <div key={x++} className={styles.preference}>
