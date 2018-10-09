@@ -1,6 +1,33 @@
 import React, { Component } from "react";
 import styles from "./App.module.scss";
 
+const Filter = ({ iconType }) => {
+  let icon, description;
+  switch (iconType) {
+    case "gym":
+      icon = (
+        <div className={`${styles.iconContainer} ${styles.gymIcon}`}>
+          <i className="fas fa-dumbbell" />
+        </div>
+      );
+      description = "Gym Nearby";
+      break;
+
+    default:
+      throw new Error("Invalid iconType");
+  }
+
+  return (
+    <div className={styles.filter}>
+      {icon}
+      {description}
+      <button className={styles.unstyledButton}>
+        <i className="fas fa-times" />
+      </button>
+    </div>
+  );
+};
+
 class App extends Component {
   render() {
     let x = 0;
@@ -22,15 +49,7 @@ class App extends Component {
           <h2>Filters</h2>
           <div>
             {new Array(8).fill(0).map(_i => (
-              <div key={x++} className={styles.preference}>
-                <div className={`${styles.iconContainer} ${styles.gymIcon}`}>
-                  <i className="fas fa-dumbbell" />
-                </div>
-                Gym Nearby
-                <button className={styles.unstyledButton}>
-                  <i className="fas fa-times" />
-                </button>
-              </div>
+              <Filter iconType="gym" key={x++} />
             ))}
           </div>
         </div>
