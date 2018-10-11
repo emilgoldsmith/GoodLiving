@@ -20,10 +20,12 @@ const Filter = ({ iconType }) => {
   return (
     <div className={styles.filter}>
       {icon}
-      {description}
-      <button className={styles.unstyledButton}>
-        <i className="fas fa-times" />
-      </button>
+      <span>{description}</span>
+      <div className={styles.growingFlex}>
+        <button className={styles.unstyledButton}>
+          <i className="fas fa-times" />
+        </button>
+      </div>
     </div>
   );
 };
@@ -46,11 +48,14 @@ class App extends Component {
           </div>
         </div>
         <div className={styles.sidebarContainer}>
-          <h2>Filters</h2>
-          <div>
-            {new Array(8).fill(0).map(_i => (
-              <Filter iconType="gym" key={x++} />
-            ))}
+          <div className={styles.propertiesContainer} />
+          <div className={styles.filterSection}>
+            <h2>Filters</h2>
+            <div className={styles.filtersContainer}>
+              {new Array(8).fill(0).map(_i => (
+                <Filter iconType="gym" key={x++} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
