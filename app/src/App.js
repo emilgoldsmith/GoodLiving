@@ -34,7 +34,23 @@ const Filter = ({ iconType }) => {
   );
 };
 
-const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => <div />;
+const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
+  let x = 0;
+  return (
+    <div className={styles.propertyResult}>
+      <div className={styles.propertyAttributesContainer}>
+        {attributes.map(singleAttribute => (
+          <Filter iconType="gym" key={x++} />
+        ))}
+      </div>
+      <div className={styles.leftHandSide}>
+        <h1>{title}</h1>
+        <h2>{subtitle}</h2>
+        <img src={previewUrl} alt="property preview" />
+      </div>
+    </div>
+  );
+};
 
 class App extends Component {
   render() {
@@ -66,7 +82,13 @@ class App extends Component {
               </div>
             </div>
             {new Array(8).fill(0).map(_i => (
-              <PropertyResult iconType="gym" key={x++} />
+              <PropertyResult
+                title="Quiet Studio in Abu Dhabi"
+                subtitle="Apartment for short term rental"
+                previewUrl="https://a0.muscache.com/im/pictures/307a5575-c3a4-4b21-8127-a37875ec1239.jpg?aki_policy=large"
+                attributes={new Array(3).fill(0)}
+                key={x++}
+              />
             ))}
           </div>
           <div className={styles.filterSection}>

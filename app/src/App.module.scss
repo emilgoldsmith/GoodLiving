@@ -25,10 +25,13 @@
     margin-left: 10px;
     margin-right: 10px;
   }
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .propertiesContainer {
   flex-grow: 1;
+  overflow-y: hidden;
 
   .propertiesHeaderContainer {
     display: flex;
