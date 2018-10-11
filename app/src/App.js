@@ -34,6 +34,8 @@ const Filter = ({ iconType }) => {
   );
 };
 
+const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => <div />;
+
 class App extends Component {
   render() {
     let x = 0;
@@ -52,7 +54,21 @@ class App extends Component {
           </div>
         </div>
         <div className={styles.sidebarContainer}>
-          <div className={styles.propertiesContainer} />
+          <div className={styles.propertiesContainer}>
+            <div className={styles.propertiesHeaderContainer}>
+              <h2>Results</h2>
+              <div className={styles.sortContainer}>
+                Sort by:
+                <select>
+                  <option value="best fit">Best Fit</option>
+                  <option value="cheapest">Cheapest</option>
+                </select>
+              </div>
+            </div>
+            {new Array(8).fill(0).map(_i => (
+              <PropertyResult iconType="gym" key={x++} />
+            ))}
+          </div>
           <div className={styles.filterSection}>
             <h2>Filters</h2>
             <div className={styles.filtersContainer}>

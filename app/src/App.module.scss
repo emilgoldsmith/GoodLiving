@@ -29,6 +29,14 @@
 
 .propertiesContainer {
   flex-grow: 1;
+
+  .propertiesHeaderContainer {
+    display: flex;
+    justify-content: space-between;
+    .sortContainer * {
+      margin-top: 20px;
+    }
+  }
 }
 
 .topContainer {
