@@ -10,7 +10,11 @@ const Filter = ({ iconType }) => {
           <i className="fas fa-dumbbell" />
         </div>
       );
-      description = "Gym Nearby";
+      description = (
+        <span>
+          Gym Within <input type="number" defaultValue={500} />m
+        </span>
+      );
       break;
 
     default:
@@ -20,7 +24,7 @@ const Filter = ({ iconType }) => {
   return (
     <div className={styles.filter}>
       {icon}
-      <span>{description}</span>
+      {description}
       <div className={styles.growingFlex}>
         <button className={styles.unstyledButton}>
           <i className="fas fa-times" />
