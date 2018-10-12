@@ -10,7 +10,11 @@ const Filter = ({ iconType }) => {
           <i className="fas fa-dumbbell" />
         </div>
       );
-      description = "Gym Nearby";
+      description = (
+        <span>
+          Gym Within <input type="number" defaultValue={500} />m
+        </span>
+      );
       break;
 
     default:
@@ -21,9 +25,30 @@ const Filter = ({ iconType }) => {
     <div className={styles.filter}>
       {icon}
       {description}
-      <button className={styles.unstyledButton}>
-        <i className="fas fa-times" />
-      </button>
+      <div className={styles.growingFlex}>
+        <button className={styles.unstyledButton}>
+          <i className="fas fa-times" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
+  let x = 0;
+  return (
+    <div className={styles.propertyResult}>
+      <div className={styles.propertyAttributesContainer}>
+        <h1>Attributes</h1>
+        {attributes.map(singleAttribute => (
+          <Filter iconType="gym" key={x++} />
+        ))}
+      </div>
+      <div className={styles.leftHandSide}>
+        <h1>{title}</h1>
+        <h2>{subtitle}</h2>
+        <img src={previewUrl} alt="property preview" />
+      </div>
     </div>
   );
 };
@@ -46,11 +71,34 @@ class App extends Component {
           </div>
         </div>
         <div className={styles.sidebarContainer}>
-          <h2>Filters</h2>
-          <div>
+          <div className={styles.propertiesContainer}>
+            <div className={styles.propertiesHeaderContainer}>
+              <h2>Results</h2>
+              <div className={styles.sortContainer}>
+                Sort by:
+                <select>
+                  <option value="best fit">Best Fit</option>
+                  <option value="cheapest">Cheapest</option>
+                </select>
+              </div>
+            </div>
             {new Array(8).fill(0).map(_i => (
-              <Filter iconType="gym" key={x++} />
+              <PropertyResult
+                title="Quiet Studio in Abu Dhabi"
+                subtitle="Apartment for short term rental"
+                previewUrl="https://a0.muscache.com/im/pictures/307a5575-c3a4-4b21-8127-a37875ec1239.jpg?aki_policy=large"
+                attributes={new Array(3).fill(0)}
+                key={x++}
+              />
             ))}
+          </div>
+          <div className={styles.filterSection}>
+            <h2>Filters</h2>
+            <div className={styles.filtersContainer}>
+              {new Array(8).fill(0).map(_i => (
+                <Filter iconType="gym" key={x++} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
