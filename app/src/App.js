@@ -39,6 +39,7 @@ const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
   return (
     <div className={styles.propertyResult}>
       <div className={styles.propertyAttributesContainer}>
+        <h1>Attributes</h1>
         {attributes.map(singleAttribute => (
           <Filter iconType="gym" key={x++} />
         ))}
