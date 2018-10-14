@@ -53,6 +53,17 @@ const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
   );
 };
 
+const MainInput = () => (
+  <div className={styles.inputContainer}>
+    <div className={styles.mainInput} placeholder="What are you looking for?">
+      Between <input type="number" /> and <input type="number" />{" "}
+      <input type="text" defaultValue="USD" />
+    </div>
+    <div className={styles.suggestion}>Select Location</div>
+    <div className={styles.suggestion}>Select Price Range</div>
+  </div>
+);
+
 class App extends Component {
   render() {
     let x = 0;
@@ -60,14 +71,7 @@ class App extends Component {
       <div className={styles.appContainer}>
         <div className={styles.map}>
           <div className={styles.topContainer}>
-            <div className={styles.inputContainer}>
-              <input
-                className={styles.mainInput}
-                placeholder="What are you looking for?"
-              />
-              <div className={styles.suggestion}>Select Location</div>
-              <div className={styles.suggestion}>Select Price Range</div>
-            </div>
+            <MainInput />
           </div>
         </div>
         <div className={styles.sidebarContainer}>
