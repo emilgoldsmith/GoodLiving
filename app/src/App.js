@@ -65,11 +65,29 @@ const MainInput = () => (
 );
 
 class App extends Component {
+  componentDidMount() {
+    // L is the LeafletJS variable
+    /* global L:false */
+    // 'map' is the id of the div where map is going to go
+    this.map = L.map("map").setView([51.505, -0.09], 13);
+    L.tileLayer(
+      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
+      {
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: "mapbox.streets",
+        accessToken:
+          "pk.eyJ1IjoiZ29sZHNtaXRoIiwiYSI6ImNqbm5ldmRmbTB1bjMzcG1xb283Ymt5eXUifQ.8nAfe1b0qiI98h1XunG4ag"
+      }
+    ).addTo(this.map);
+  }
+
   render() {
     let x = 0;
     return (
       <div className={styles.appContainer}>
-        <div className={styles.map}>
+        <div className={styles.map} id="map">
           <div className={styles.topContainer}>
             <MainInput />
           </div>
