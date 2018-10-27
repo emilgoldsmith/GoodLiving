@@ -1,6 +1,18 @@
-import * as request from "request-promise-native";
+const request = require("request-promise-native");
 
-export function queryAirbnb(
+module.exports.setupAirbnbRoute = function setupAirbnbRoute(router) {
+  router.get("/query-airbnb", async (req, res) => {
+    const locations = await queryAirbnb(
+      req.query.swLat,
+      req.query.swLong,
+      req.query.neLat,
+      req.query.neLong
+    );
+    res.json(locations);
+  });
+};
+
+function queryAirbnb(
   swLat,
   swLong,
   neLat,
@@ -12,14 +24,21 @@ export function queryAirbnb(
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
     qs: getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice)
   }).then(response => {
-    response = JSON.parse(response);
-    if (response.explore_tabs.length !== 1) {
-      console.error(response.explore_tabs.length);
+    const parsedResponse = JSON.parse(response);
+    if (parsedResponse.explore_tabs.length !== 1) {
+      console.error(parsedResponse.explore_tabs.length);
       throw new Error("More than one explore tab");
     }
-    const section = response.explore_tabs[0].sections.find(
+    const section = parsedResponse.explore_tabs[0].sections.find(
       x => x.section_type_uid === "PAGINATED_HOMES"
     );
+    if (
+      !section &&
+      parsedResponse.explore_tabs[0].sections[0].messages[0].title ===
+        "No results"
+    ) {
+      return [];
+    }
     const locations = section.listings.map(x => ({
       priceString: x.pricing_quote.price_string,
       latitude: x.listing.lat,

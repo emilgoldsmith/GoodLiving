@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styles from "./App.module.scss";
+import { queryAirbnb } from "../api/airbnb/airbnb-client";
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -81,6 +82,12 @@ class App extends Component {
           "pk.eyJ1IjoiZ29sZHNtaXRoIiwiYSI6ImNqbm5ldmRmbTB1bjMzcG1xb283Ymt5eXUifQ.8nAfe1b0qiI98h1XunG4ag"
       }
     ).addTo(this.map);
+
+    this.map.on("locationfound", async event => {
+      const { lng: swLong, lat: swLat } = event.bounds.getSouthWest();
+      const { lng: neLong, lat: neLat } = event.bounds.getNorthEast();
+      await queryAirbnb(swLat, swLong, neLat, neLong);
+    });
   }
 
   render() {
