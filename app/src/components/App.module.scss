@@ -70,6 +70,10 @@
 .topContainer {
   display: flex;
   padding-top: 3vh;
+  &,
+  * {
+    z-index: 1000;
+  }
 }
 
 .inputContainer {

@@ -1,3 +1,36 @@
+import * as request from "request-promise-native";
+
+export function queryAirbnb(
+  swLat,
+  swLong,
+  neLat,
+  neLong,
+  maxPrice = 1000 * 1000 * 1000,
+  minPrice = 0
+) {
+  return request({
+    uri: "https://www.airbnb.ae/api/v2/explore_tabs",
+    qs: getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice)
+  }).then(response => {
+    response = JSON.parse(response);
+    if (response.explore_tabs.length !== 1) {
+      console.error(response.explore_tabs.length);
+      throw new Error("More than one explore tab");
+    }
+    const section = response.explore_tabs[0].sections.find(
+      x => x.section_type_uid === "PAGINATED_HOMES"
+    );
+    const locations = section.listings.map(x => ({
+      priceString: x.pricing_quote.price_string,
+      latitude: x.listing.lat,
+      longtitude: x.listing.lng,
+      picture: x.listing.picture_url
+    }));
+    console.log(locations);
+    return locations;
+  });
+}
+
 function getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
   return {
     sw_lat: swLat.toString(),
@@ -41,33 +74,3 @@ function getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
     key: "d306zoyjsyarp7ifhu67rjxn52tv0t20"
   };
 }
-
-const request = require("request-promise-native");
-
-request({
-  uri: "https://www.airbnb.ae/api/v2/explore_tabs",
-  qs: getQueryString(56, 10, 57, 11, 30, 800)
-}).then(response => {
-  response = JSON.parse(response);
-  if (response.explore_tabs.length !== 1) {
-    console.log("More than one explore tab");
-    console.log(response.explore_tabs.length);
-    process.exit(1);
-  }
-  const section = response.explore_tabs[0].sections.find(
-    x => x.section_type_uid === "PAGINATED_HOMES"
-  );
-  // if (response.explore_tabs[0].sections.length !== 1) {
-  //   console.log("More than one section");
-  //   console.log(response.explore_tabs[0].sections.length);
-  //   console.log(response.explore_tabs[0].sections);
-  //   process.exit(1);
-  // }
-  const locations = section.listings.map(x => ({
-    priceString: x.pricing_quote.price_string,
-    latitude: x.listing.lat,
-    longtitude: x.listing.lng,
-    picture: x.listing.picture_url
-  }));
-  console.log(locations);
-});

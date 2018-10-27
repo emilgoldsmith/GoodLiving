@@ -69,7 +69,7 @@ class App extends Component {
     // L is the LeafletJS variable
     /* global L:false */
     // 'map' is the id of the div where map is going to go
-    this.map = L.map("map").setView([51.505, -0.09], 13);
+    this.map = L.map("map").locate({ setView: true, maxZoom: 14 });
     L.tileLayer(
       "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
       {
