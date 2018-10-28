@@ -45,7 +45,6 @@ function queryAirbnb(
       longtitude: x.listing.lng,
       picture: x.listing.picture_url
     }));
-    console.log(locations);
     return locations;
   });
 }
