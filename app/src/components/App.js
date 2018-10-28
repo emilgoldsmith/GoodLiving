@@ -83,11 +83,23 @@ class App extends Component {
       }
     ).addTo(this.map);
 
+    this.markers = [];
+
+    const updateMarkers = locations => {
+      this.markers.forEach(oldMarker => oldMarker.remove());
+      this.markers = locations.map(singleLocation =>
+        L.marker([singleLocation.latitude, singleLocation.longtitude]).addTo(
+          this.map
+        )
+      );
+    };
+
     this.map.on("moveend", async event => {
       const bounds = this.map.getBounds();
       const { lng: swLong, lat: swLat } = bounds.getSouthWest();
       const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-      await queryAirbnb(swLat, swLong, neLat, neLong);
+      const locations = await queryAirbnb(swLat, swLong, neLat, neLong);
+      updateMarkers(locations);
     });
   }
 
