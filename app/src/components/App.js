@@ -83,9 +83,10 @@ class App extends Component {
       }
     ).addTo(this.map);
 
-    this.map.on("locationfound", async event => {
-      const { lng: swLong, lat: swLat } = event.bounds.getSouthWest();
-      const { lng: neLong, lat: neLat } = event.bounds.getNorthEast();
+    this.map.on("moveend", async event => {
+      const bounds = this.map.getBounds();
+      const { lng: swLong, lat: swLat } = bounds.getSouthWest();
+      const { lng: neLong, lat: neLat } = bounds.getNorthEast();
       await queryAirbnb(swLat, swLong, neLat, neLong);
     });
   }
