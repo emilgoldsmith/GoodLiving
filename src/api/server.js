@@ -2,12 +2,18 @@ const express = require("express");
 const { setupAirbnbRoute } = require("./airbnb/airbnb-server");
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
-const router = express.Router();
+const apiRouter = express.Router();
 
-setupAirbnbRoute(router);
+setupAirbnbRoute(apiRouter);
 
-app.use("/api", router);
+app.use(express.static("build"));
+
+app.use("/api", apiRouter);
+
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
 
 app.listen(port, () => console.log(`Running on port ${port}`));
