@@ -9,7 +9,8 @@ function disableBubbling(e) {
 
 export default class MainInput extends Component {
   searchLocation = async query => {
-    console.log(await geocode(query));
+    const result = await geocode(query);
+    this.props.moveMap(result[0].boundingbox);
   };
 
   render() {

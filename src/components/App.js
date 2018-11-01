@@ -56,6 +56,14 @@ const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
 };
 
 class App extends Component {
+  moveMap = boundingbox => {
+    const latLngBounds = [
+      [boundingbox[0], boundingbox[2]],
+      [boundingbox[1], boundingbox[3]]
+    ];
+    this.map.fitBounds(latLngBounds);
+  };
+
   componentDidMount() {
     // L is the LeafletJS variable
     /* global L:false */
@@ -99,7 +107,7 @@ class App extends Component {
       <div className={styles.appContainer}>
         <div className={styles.map} id="map">
           <div className={styles.topContainer}>
-            <MainInput />
+            <MainInput moveMap={this.moveMap} />
           </div>
         </div>
         <div className={styles.sidebarContainer}>
