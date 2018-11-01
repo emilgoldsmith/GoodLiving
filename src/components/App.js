@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styles from "./App.module.scss";
 import { queryAirbnb } from "../api/airbnb/airbnb-client";
+import MainInput from "./MainInput";
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -53,17 +54,6 @@ const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
     </div>
   );
 };
-
-const MainInput = () => (
-  <div className={styles.inputContainer}>
-    <div className={styles.mainInput} placeholder="What are you looking for?">
-      Between <input type="number" /> and <input type="number" />{" "}
-      <input type="text" defaultValue="USD" />
-    </div>
-    <div className={styles.suggestion}>Select Location</div>
-    <div className={styles.suggestion}>Select Price Range</div>
-  </div>
-);
 
 class App extends Component {
   componentDidMount() {
