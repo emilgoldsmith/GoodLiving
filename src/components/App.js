@@ -56,6 +56,13 @@ const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
 };
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      results: []
+    };
+  }
+
   moveMap = boundingbox => {
     const latLngBounds = [
       [boundingbox[0], boundingbox[2]],
@@ -83,7 +90,7 @@ class App extends Component {
 
     this.markers = [];
 
-    const updateMarkers = locations => {
+    const updateResults = locations => {
       this.markers.forEach(oldMarker => oldMarker.remove());
       this.markers = locations.map(singleLocation =>
         L.marker([singleLocation.latitude, singleLocation.longitude]).addTo(
@@ -96,8 +103,11 @@ class App extends Component {
       const bounds = this.map.getBounds();
       const { lng: swLong, lat: swLat } = bounds.getSouthWest();
       const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-      const locations = await queryAirbnb(swLat, swLong, neLat, neLong);
-      updateMarkers(locations);
+      const results = await queryAirbnb(swLat, swLong, neLat, neLong);
+      updateResults(results);
+      this.setState({
+        results: results.slice(0, 10)
+      });
     });
   }
 
@@ -122,13 +132,13 @@ class App extends Component {
                 </select>
               </div>
             </div>
-            {new Array(8).fill(0).map(_i => (
+            {this.state.results.map(result => (
               <PropertyResult
-                title="Quiet Studio in Abu Dhabi"
-                subtitle="Apartment for short term rental"
-                previewUrl="https://a0.muscache.com/im/pictures/307a5575-c3a4-4b21-8127-a37875ec1239.jpg?aki_policy=large"
-                attributes={new Array(3).fill(0)}
-                key={x++}
+                title={result.title}
+                subtitle={result.type}
+                previewUrl={result.picture}
+                key={`${result.title} ${result.latitude} ${result.longitude}`}
+                attributes={Array(3).fill(0)}
               />
             ))}
           </div>

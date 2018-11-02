@@ -43,7 +43,9 @@ function queryAirbnb(
       priceString: x.pricing_quote.price_string,
       latitude: x.listing.lat,
       longitude: x.listing.lng,
-      picture: x.listing.picture_url
+      picture: x.listing.picture_url,
+      type: x.listing.room_and_property_type,
+      title: x.listing.name
     }));
     return locations;
   });

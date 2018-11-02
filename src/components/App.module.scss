@@ -27,7 +27,7 @@
 
 .propertiesContainer {
   flex-grow: 1;
-  overflow-y: hidden;
+  overflow-y: auto;
 
   .propertiesHeaderContainer {
     display: flex;
