@@ -42,7 +42,7 @@ function queryAirbnb(
     const locations = section.listings.map(x => ({
       priceString: x.pricing_quote.price_string,
       latitude: x.listing.lat,
-      longtitude: x.listing.lng,
+      longitude: x.listing.lng,
       picture: x.listing.picture_url
     }));
     return locations;

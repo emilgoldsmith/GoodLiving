@@ -48,7 +48,7 @@ async function getAirbnbUrl() {
       type: "input",
       name: "swLong",
       message:
-        "What is the longtitude of the southwest corner of your search square?",
+        "What is the longitude of the southwest corner of your search square?",
       validate: isFloat
     },
     {
@@ -62,7 +62,7 @@ async function getAirbnbUrl() {
       type: "input",
       name: "neLong",
       message:
-        "What is the longtitude of the northeast corner of your search square?",
+        "What is the longitude of the northeast corner of your search square?",
       validate: isFloat
     },
     {

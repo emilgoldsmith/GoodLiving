@@ -86,7 +86,7 @@ class App extends Component {
     const updateMarkers = locations => {
       this.markers.forEach(oldMarker => oldMarker.remove());
       this.markers = locations.map(singleLocation =>
-        L.marker([singleLocation.latitude, singleLocation.longtitude]).addTo(
+        L.marker([singleLocation.latitude, singleLocation.longitude]).addTo(
           this.map
         )
       );
