@@ -10,8 +10,13 @@ import { debounce } from "debounce";
 
 class Suggestion extends Component {
   handleClick = () => {
-    this.props.moveMap(this.props.suggestion.boundingBox);
-    this.props.clearSuggestions();
+    const { suggestion } = this.props;
+    if (suggestion.template === "near") {
+      this.props.setTemplate("near");
+    } else {
+      this.props.moveMap(suggestion.boundingBox);
+      this.props.clearSuggestions();
+    }
   };
 
   render() {
@@ -28,10 +33,18 @@ export default class MainInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentTemplate: null,
       inputValue: "",
-      suggestions: []
+      suggestions: [
+        {
+          template: "near",
+          displayName: "Require nearby facility"
+        }
+      ]
     };
   }
+
+  setTemplate = newTemplate => this.setState({ currentTemplate: newTemplate });
 
   searchLocation = async query => {
     const results = await geocode(query);
@@ -56,7 +69,6 @@ export default class MainInput extends Component {
   generateSuggestions = debounce(async () => {
     const query = this.state.inputValue;
     const results = await geocode(query);
-    console.log(results);
     this.setState({
       suggestions: results.slice(0, 3).map(singleResult => ({
         displayName: singleResult.display_name,
@@ -75,8 +87,31 @@ export default class MainInput extends Component {
 
   render() {
     if (true) {
-      return (
-        <div className={styles.inputContainer}>
+      const suggestions = this.state.suggestions.map(suggestion => (
+        <Suggestion
+          key={`${suggestion.latitude} ${suggestion.longitude}`}
+          suggestion={suggestion}
+          moveMap={this.props.moveMap}
+          clearSuggestions={this.clearSuggestions}
+          setTemplate={this.setTemplate}
+        />
+      ));
+      let inputBar;
+      if (this.state.currentTemplate) {
+        inputBar = (
+          <div className={styles.mainInput}>
+            Near{" "}
+            <select defaultValue="gym">
+              <option value="gym">Gym</option>
+            </select>
+            <button>Apply Restriction</button>
+            <button onClick={this.setTemplate.bind(this, null)}>
+              Exit Template
+            </button>
+          </div>
+        );
+      } else {
+        inputBar = (
           <input
             className={styles.mainInput}
             value={this.state.inputValue}
@@ -84,14 +119,12 @@ export default class MainInput extends Component {
             placeholder="What are you looking for?"
             onKeyUp={this.handleInputSubmit}
           />
-          {this.state.suggestions.map(suggestion => (
-            <Suggestion
-              key={`${suggestion.latitude} ${suggestion.longitude}`}
-              suggestion={suggestion}
-              moveMap={this.props.moveMap}
-              clearSuggestions={this.clearSuggestions}
-            />
-          ))}
+        );
+      }
+      return (
+        <div className={styles.inputContainer}>
+          {inputBar}
+          {suggestions}
         </div>
       );
     } else {
