@@ -104,10 +104,8 @@ export default class MainInput extends Component {
             <select defaultValue="gym">
               <option value="gym">Gym</option>
             </select>
-            <button>Apply Restriction</button>
-            <button onClick={this.setTemplate.bind(this, null)}>
-              Exit Template
-            </button>
+            <button>Apply</button>
+            <button onClick={this.setTemplate.bind(this, null)}>Reset</button>
           </div>
         );
       } else {
