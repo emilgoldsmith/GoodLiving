@@ -11,9 +11,8 @@
     "resolveJsonModule": true,
     "jsx": "preserve",
     "lib": ["ES2015"],
-    "outDir": "./built_api",
+    "outDir": "./built_api"
     // "strict": true,
-    "noEmit": true
   },
   "files": ["./src/api/server.ts"]
 }
