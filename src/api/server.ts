@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { setupAirbnbRoute } from "./airbnb/airbnb-server";
 import { setupGeocodeRoute } from "./geocode/geocode-server";
 import * as dotenv from "dotenv";

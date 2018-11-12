@@ -11,6 +11,7 @@ coverage
 
 # production
 build
+built_api
 
 # misc
 .DS_Store

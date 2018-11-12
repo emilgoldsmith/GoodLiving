@@ -1,7 +1,7 @@
 import request from "request-promise-native";
 import querystring from "querystring";
 
-export function setupAirbnbRoute(router) {
+export function setupGeocodeRoute(router) {
   router.get("/geocode", async (req, res) => {
     const qs = querystring.stringify({
       key: process.env.MAP_QUEST_API_KEY,
