@@ -1,7 +1,9 @@
-const express = require("express");
-const { setupAirbnbRoute } = require("./airbnb/airbnb-server");
-const { setupGeocodeRoute } = require("./geocode/geocode-server");
-require("dotenv").config();
+import * as express from "express";
+import { setupAirbnbRoute } from "./airbnb/airbnb-server";
+import { setupGeocodeRoute } from "./geocode/geocode-server";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;

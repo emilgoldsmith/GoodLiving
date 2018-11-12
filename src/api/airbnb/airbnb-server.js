@@ -1,6 +1,6 @@
-const request = require("request-promise-native");
+import * as request from "request-promise-native";
 
-module.exports.setupAirbnbRoute = function setupAirbnbRoute(router) {
+export function setupAirbnbRoute(router) {
   router.get("/query-airbnb", async (req, res) => {
     const locations = await queryAirbnb(
       req.query.swLat,
@@ -10,7 +10,7 @@ module.exports.setupAirbnbRoute = function setupAirbnbRoute(router) {
     );
     res.json(locations);
   });
-};
+}
 
 function queryAirbnb(
   swLat,
