@@ -1,4 +1,4 @@
-import * as request from "request-promise-native";
+import request from "request-promise-native";
 
 export function setupAirbnbRoute(router) {
   router.get("/query-airbnb", async (req, res) => {

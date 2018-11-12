@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": true,
@@ -10,7 +10,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "lib": ["ES2015"],
     "outDir": "./built_api"
     // "strict": true,
   },
