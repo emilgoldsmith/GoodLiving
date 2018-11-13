@@ -26,6 +26,7 @@
   "scripts": {
     "start": "node built_api/server.js",
     "dev": "react-scripts start",
+    "dev-api": "yarn build-api && yarn start",
     "build": "react-scripts build && yarn build-api",
     "build-api": "tsc -p api.tsconfig.json",
     "heroku-postbuild": "yarn build",
