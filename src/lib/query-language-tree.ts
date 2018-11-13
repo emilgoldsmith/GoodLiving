@@ -13,10 +13,7 @@ export class StringTreeValue implements TreeValue {
     // console.log(restOfQuery);
     const queryString = restOfQuery.join(" ").toLowerCase();
     // console.log("|", queryString, "|", this.stringValue.toLocaleLowerCase());
-    return (
-      queryString === "" ||
-      queryString.startsWith(this.stringValue.toLowerCase())
-    );
+    return this.stringValue.toLowerCase().startsWith(queryString);
   }
 }
 
@@ -137,6 +134,7 @@ export function getTreeSuggestions(
     // No more children so this is a dead end
     return [];
   }
+
   const matchesValues =
     currentNode === treeRoot ||
     currentNode.values.some(value => value.matchRestOfQuery(words));
