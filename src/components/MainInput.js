@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styles from "./MainInput.module.scss";
 import { geocode } from "../api/geocode/geocode-client";
 import { debounce } from "debounce";
-import { treeRoot } from "../lib/query-language-tree";
+import { getTreeSuggestions } from "../lib/query-language-tree";
 
 // function disableBubbling(e) {
 //   e.preventDefault();
@@ -67,20 +67,21 @@ export default class MainInput extends Component {
     );
   };
 
-  getLocationSuggestions = async () => {
+  generateSuggestions = async () => {
     const query = this.state.inputValue;
-    const results = await geocode(query);
-    this.setState({
-      suggestions: results.slice(0, 3).map(singleResult => ({
-        displayName: singleResult.display_name,
-        boundingBox: singleResult.boundingbox,
-        latitude: singleResult.lat,
-        longitude: singleResult.lon
-      }))
-    });
-  };
+    console.log(query);
+    console.log(getTreeSuggestions(query.split(" ").filter(x => x)));
 
-  generateSuggestions = debounce(async () => {}, 200);
+    // const results = await geocode(query);
+    // this.setState({
+    //   suggestions: results.slice(0, 3).map(singleResult => ({
+    //     displayName: singleResult.display_name,
+    //     boundingBox: singleResult.boundingbox,
+    //     latitude: singleResult.lat,
+    //     longitude: singleResult.lon
+    //   }))
+    // });
+  };
 
   clearSuggestions = () => {
     this.setState({

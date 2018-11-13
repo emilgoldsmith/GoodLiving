@@ -10,8 +10,13 @@ export class StringTreeValue implements TreeValue {
   constructor(private stringValue: string) {}
 
   matchRestOfQuery(restOfQuery: string[]): boolean {
+    // console.log(restOfQuery);
     const queryString = restOfQuery.join(" ").toLowerCase();
-    return queryString.startsWith(this.stringValue.toLowerCase());
+    // console.log("|", queryString, "|", this.stringValue.toLocaleLowerCase());
+    return (
+      queryString === "" ||
+      queryString.startsWith(this.stringValue.toLowerCase())
+    );
   }
 }
 
@@ -132,6 +137,12 @@ export function getTreeSuggestions(
     // No more children so this is a dead end
     return [];
   }
+  const matchesValues =
+    currentNode === treeRoot ||
+    currentNode.values.some(value => value.matchRestOfQuery(words));
+
+  if (!matchesValues) return [];
+
   if (words.length === 0) {
     // We matched all the words in the query so we suggest all the possible next values
     return currentNode.children
@@ -140,7 +151,9 @@ export function getTreeSuggestions(
   }
 
   const suggestions = currentNode.children
-    .map(child => getTreeSuggestions(words.slice(1), child))
+    .map(child =>
+      getTreeSuggestions(words.slice(currentNode === treeRoot ? 0 : 1), child)
+    )
     .reduce((prev, cur) => prev.concat(cur));
 
   return suggestions;
