@@ -1,46 +1,62 @@
+export type MatchObject = {
+  matches: boolean;
+  isPartialMatch?: boolean;
+};
+
+export type ModifiedMatchObject = MatchObject & {
+  originalValue: TreeValue;
+};
+
 export interface TreeValue {
   /**
    * This will test whether the value matches the rest of the query. Note that this could be
    * mid typing and have an unfinished word in it
    */
-  matchRestOfQuery(restOfQuery: string[]): boolean;
+  matchRestOfQuery(restOfQuery: string[]): MatchObject;
 }
 
 export class StringTreeValue implements TreeValue {
   constructor(private stringValue: string) {}
 
-  matchRestOfQuery(restOfQuery: string[]): boolean {
-    // console.log(restOfQuery);
+  matchRestOfQuery(restOfQuery: string[]): MatchObject {
     const queryString = restOfQuery.join(" ").toLowerCase();
-    // console.log("|", queryString, "|", this.stringValue.toLocaleLowerCase());
-    return this.stringValue.toLowerCase().startsWith(queryString);
+    const targetContainsQuery = this.stringValue
+      .toLowerCase()
+      .startsWith(queryString);
+    const queryContainsTarget = queryString.startsWith(
+      this.stringValue.toLowerCase()
+    );
+    return {
+      matches: targetContainsQuery,
+      isPartialMatch: targetContainsQuery && !queryContainsTarget
+    };
   }
 }
 
 export interface InputTreeValue extends TreeValue {}
 
 export class LocationTreeValue implements InputTreeValue {
-  matchRestOfQuery(restOfQuery: string[]): boolean {
-    if (restOfQuery.length === 0) return false;
-    return true;
+  matchRestOfQuery(restOfQuery: string[]): MatchObject {
+    if (restOfQuery.length === 0) return { matches: false };
+    return { matches: true, isPartialMatch: true };
   }
 }
 export class DistanceTreeValue implements InputTreeValue {
-  matchRestOfQuery(restOfQuery: string[]): boolean {
-    if (restOfQuery.length === 0) return false;
-    return true;
+  matchRestOfQuery(restOfQuery: string[]): MatchObject {
+    if (restOfQuery.length === 0) return { matches: false };
+    return { matches: true, isPartialMatch: true };
   }
 }
 export class DateRangeTreeValue implements InputTreeValue {
-  matchRestOfQuery(restOfQuery: string[]): boolean {
-    if (restOfQuery.length === 0) return false;
-    return true;
+  matchRestOfQuery(restOfQuery: string[]): MatchObject {
+    if (restOfQuery.length === 0) return { matches: false };
+    return { matches: true, isPartialMatch: true };
   }
 }
 export class PriceRangeTreeValue implements InputTreeValue {
-  matchRestOfQuery(restOfQuery: string[]): boolean {
-    if (restOfQuery.length === 0) return false;
-    return true;
+  matchRestOfQuery(restOfQuery: string[]): MatchObject {
+    if (restOfQuery.length === 0) return { matches: false };
+    return { matches: true, isPartialMatch: true };
   }
 }
 
@@ -135,17 +151,39 @@ export function getTreeSuggestions(
     return [];
   }
 
-  const matchesValues =
-    currentNode === treeRoot ||
-    currentNode.values.some(value => value.matchRestOfQuery(words));
+  const matches: ModifiedMatchObject[] =
+    currentNode === treeRoot
+      ? [{ matches: true, originalValue: new StringTreeValue(" ") }]
+      : currentNode.values.map(value => ({
+          ...value.matchRestOfQuery(words),
+          originalValue: value
+        }));
 
-  if (!matchesValues) return [];
+  const hasFullMatches = matches.some(x => x.matches && !x.isPartialMatch);
+  const hasPartialMatches = matches.some(
+    x => x.matches && x.isPartialMatch === true
+  );
+  const hasAnyMatches = hasFullMatches || hasPartialMatches;
 
-  if (words.length === 0) {
-    // We matched all the words in the query so we suggest all the possible next values
-    return currentNode.children
-      .map(x => x.values)
-      .reduce((prev, cur) => prev.concat(cur));
+  if (!hasAnyMatches) return [];
+
+  if (words.length === 1 && currentNode !== treeRoot) {
+    let suggestions: TreeValue[] = [];
+    if (hasFullMatches) {
+      suggestions = suggestions.concat(
+        currentNode.children
+          .map(x => x.values)
+          .reduce((prev, cur) => prev.concat(cur))
+      );
+    }
+    if (hasPartialMatches) {
+      suggestions = suggestions.concat(
+        matches
+          .filter(x => x.matches && x.isPartialMatch === true)
+          .map(x => x.originalValue)
+      );
+    }
+    return suggestions;
   }
 
   const suggestions = currentNode.children
