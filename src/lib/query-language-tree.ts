@@ -1,29 +1,46 @@
 export interface TreeValue {
   /**
-   * This will test whether the value matches a word. Word can be a partial word
-   * at the end of a query that hasn't been done typing yet
+   * This will test whether the value matches the rest of the query. Note that this could be
+   * mid typing and have an unfinished word in it
    */
-  matchWithWord(word: string): boolean;
+  matchRestOfQuery(restOfQuery: string[]): boolean;
 }
 
 export class StringTreeValue implements TreeValue {
   constructor(private stringValue: string) {}
 
-  matchWithWord(word: string): boolean {
-    return word.startsWith(this.stringValue);
+  matchRestOfQuery(restOfQuery: string[]): boolean {
+    const queryString = restOfQuery.join(" ").toLowerCase();
+    return queryString.startsWith(this.stringValue.toLowerCase());
   }
 }
 
-// export type TreeValue =
-//   | string
-//   | {
-//       type: "location";
-//     }
-//   | { type: "distance" }
-//   | {
-//       type: "daterange";
-//     }
-//   | { type: "pricerange" };
+export interface InputTreeValue extends TreeValue {}
+
+export class LocationTreeValue implements InputTreeValue {
+  matchRestOfQuery(restOfQuery: string[]): boolean {
+    if (restOfQuery.length === 0) return false;
+    return true;
+  }
+}
+export class DistanceTreeValue implements InputTreeValue {
+  matchRestOfQuery(restOfQuery: string[]): boolean {
+    if (restOfQuery.length === 0) return false;
+    return true;
+  }
+}
+export class DateRangeTreeValue implements InputTreeValue {
+  matchRestOfQuery(restOfQuery: string[]): boolean {
+    if (restOfQuery.length === 0) return false;
+    return true;
+  }
+}
+export class PriceRangeTreeValue implements InputTreeValue {
+  matchRestOfQuery(restOfQuery: string[]): boolean {
+    if (restOfQuery.length === 0) return false;
+    return true;
+  }
+}
 
 export type TreeNode = {
   values: TreeValue[];
@@ -42,44 +59,56 @@ export const treeRoot: TreeNode = {
     {
       values: [new StringTreeValue("is")],
       children: [
-        { values: ["in"], children: [{ values: [{ type: "location" }] }] },
         {
-          values: ["near"],
-          children: [{ values: [{ type: "location" }, ...placeTypes] }]
+          values: [new StringTreeValue("in")],
+          children: [{ values: [new LocationTreeValue()] }]
         },
         {
-          values: ["within"],
+          values: [new StringTreeValue("near")],
+          children: [{ values: [new LocationTreeValue(), ...placeTypes] }]
+        },
+        {
+          values: [new StringTreeValue("within")],
           children: [
             {
-              values: [{ type: "distance" }],
+              values: [new DistanceTreeValue()],
               children: [
                 {
-                  values: ["from"],
-                  children: [{ values: [{ type: "location" }, ...placeTypes] }]
+                  values: [new StringTreeValue("from")],
+                  children: [
+                    { values: [new LocationTreeValue(), ...placeTypes] }
+                  ]
                 }
               ]
             }
           ]
         },
         {
-          values: ["has"],
-          children: [{ values: ["a gym", "laundry available"] }]
-        },
-        {
-          values: ["available"],
+          values: [new StringTreeValue("has")],
           children: [
             {
-              values: ["during"],
-              children: [{ values: [{ type: "daterange" }] }]
+              values: [
+                new StringTreeValue("a gym"),
+                new StringTreeValue("laundry available")
+              ]
+            }
+          ]
+        },
+        {
+          values: [new StringTreeValue("available")],
+          children: [
+            {
+              values: [new StringTreeValue("during")],
+              children: [{ values: [new DateRangeTreeValue()] }]
             },
             {
-              values: ["for"],
+              values: [new StringTreeValue("for")],
               children: [
                 {
                   values: [
-                    "subletting",
-                    "short-term (vacation) rental",
-                    "long-term rental"
+                    new StringTreeValue("subletting"),
+                    new StringTreeValue("short-term (vacation) rental"),
+                    new StringTreeValue("long-term rental")
                   ]
                 }
               ]
@@ -89,8 +118,8 @@ export const treeRoot: TreeNode = {
       ]
     },
     {
-      values: ["costs"],
-      children: [{ values: [{ type: "pricerange" }] }]
+      values: [new StringTreeValue("costs")],
+      children: [{ values: [new PriceRangeTreeValue()] }]
     }
   ]
 };
