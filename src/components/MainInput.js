@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styles from "./MainInput.module.scss";
 import { geocode } from "../api/geocode/geocode-client";
 import { debounce } from "debounce";
+import { treeRoot } from "../lib/query-language-tree";
 
 // function disableBubbling(e) {
 //   e.preventDefault();
@@ -66,7 +67,7 @@ export default class MainInput extends Component {
     );
   };
 
-  generateSuggestions = debounce(async () => {
+  getLocationSuggestions = async () => {
     const query = this.state.inputValue;
     const results = await geocode(query);
     this.setState({
@@ -77,7 +78,9 @@ export default class MainInput extends Component {
         longitude: singleResult.lon
       }))
     });
-  }, 500);
+  };
+
+  generateSuggestions = debounce(async () => {}, 200);
 
   clearSuggestions = () => {
     this.setState({
