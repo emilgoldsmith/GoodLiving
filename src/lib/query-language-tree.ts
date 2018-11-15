@@ -16,7 +16,7 @@ export interface TreeValue {
 }
 
 export class StringTreeValue implements TreeValue {
-  constructor(private stringValue: string) {}
+  constructor(readonly stringValue: string) {}
 
   matchRestOfQuery(restOfQuery: string[]): MatchObject {
     const queryString = restOfQuery.join(" ").toLowerCase();
@@ -27,7 +27,7 @@ export class StringTreeValue implements TreeValue {
       this.stringValue.toLowerCase()
     );
     return {
-      matches: targetContainsQuery,
+      matches: targetContainsQuery || queryContainsTarget,
       isPartialMatch: targetContainsQuery && !queryContainsTarget
     };
   }
@@ -153,11 +153,6 @@ export function getTreeSuggestions(
   words: string[],
   currentNode: TreeNode = treeRoot
 ): TreeValue[] {
-  if (!currentNode.children) {
-    // No more children so this is a dead end
-    return [];
-  }
-
   const matches: ModifiedMatchObject[] =
     currentNode === treeRoot
       ? [{ matches: true, originalValue: new StringTreeValue(" ") }]
@@ -175,8 +170,12 @@ export function getTreeSuggestions(
   if (!hasAnyMatches) return [];
 
   if (words.length === 1 && currentNode !== treeRoot) {
+    console.log(currentNode.values);
+    if (currentNode.values.find(x => (x as any).stringValue === "near")) {
+      console.log(words);
+    }
     let suggestions: TreeValue[] = [];
-    if (hasFullMatches) {
+    if (hasFullMatches && currentNode.children) {
       suggestions = suggestions.concat(
         currentNode.children
           .map(x => x.values)
@@ -192,6 +191,8 @@ export function getTreeSuggestions(
     }
     return suggestions;
   }
+
+  if (!currentNode.children) return [];
 
   const suggestions = currentNode.children
     .map(child =>
