@@ -36,12 +36,13 @@ export default class MainInput extends Component {
     this.state = {
       currentTemplate: null,
       inputValue: "",
-      suggestions: [
-        {
-          template: "near",
-          displayName: "Require nearby facility"
-        }
-      ]
+      suggestions: []
+      // suggestions: [
+      //   {
+      //     template: "near",
+      //     displayName: "Require nearby facility"
+      //   }
+      // ]
     };
   }
 
@@ -59,8 +60,7 @@ export default class MainInput extends Component {
 
   handleInputChange = event => {
     const suggestions = this.generateSuggestions(event.target.value);
-    console.log(suggestions);
-    if (suggestions.length > 0) {
+    if (suggestions.length > 0 || event.target.value === "") {
       this.setState({
         inputValue: event.target.value,
         suggestions: suggestions.slice(0, 3)
@@ -123,6 +123,7 @@ export default class MainInput extends Component {
             className={styles.mainInput}
             value={this.state.inputValue}
             onChange={this.handleInputChange}
+            onFocus={this.handleInputChange}
             placeholder="What are you looking for?"
             onKeyUp={this.handleInputSubmit}
           />
