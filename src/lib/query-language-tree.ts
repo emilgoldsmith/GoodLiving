@@ -33,27 +33,34 @@ export class StringTreeValue implements TreeValue {
   }
 }
 
-export interface InputTreeValue extends TreeValue {}
+export abstract class InputTreeValue implements TreeValue {
+  public abstract placeholder: string;
+  public abstract matchRestOfQuery(restOfQuery: string[]): MatchObject;
+}
 
-export class LocationTreeValue implements InputTreeValue {
+export class LocationTreeValue extends InputTreeValue {
+  public placeholder = "$LOCATION";
   matchRestOfQuery(restOfQuery: string[]): MatchObject {
     if (restOfQuery.length === 0) return { matches: false };
     return { matches: true, isPartialMatch: true };
   }
 }
-export class DistanceTreeValue implements InputTreeValue {
+export class DistanceTreeValue extends InputTreeValue {
+  public placeholder = "$DISTANCE";
   matchRestOfQuery(restOfQuery: string[]): MatchObject {
     if (restOfQuery.length === 0) return { matches: false };
     return { matches: true, isPartialMatch: true };
   }
 }
-export class DateRangeTreeValue implements InputTreeValue {
+export class DateRangeTreeValue extends InputTreeValue {
+  public placeholder = "$DATERANGE";
   matchRestOfQuery(restOfQuery: string[]): MatchObject {
     if (restOfQuery.length === 0) return { matches: false };
     return { matches: true, isPartialMatch: true };
   }
 }
-export class PriceRangeTreeValue implements InputTreeValue {
+export class PriceRangeTreeValue extends InputTreeValue {
+  public placeholder = "$PRICERANGE";
   matchRestOfQuery(restOfQuery: string[]): MatchObject {
     if (restOfQuery.length === 0) return { matches: false };
     return { matches: true, isPartialMatch: true };

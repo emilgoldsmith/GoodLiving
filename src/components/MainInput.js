@@ -69,8 +69,14 @@ export default class MainInput extends Component {
 
   generateSuggestions = async () => {
     const query = this.state.inputValue;
-    console.log(query);
-    console.log(getTreeSuggestions(query.split(" ").filter(x => x)));
+    const suggestions = getTreeSuggestions(query.split(" ").filter(x => x));
+    const stringSuggestions = suggestions.map(
+      x => x.stringValue || x.placeholder
+    );
+    console.log(stringSuggestions);
+    this.setState({
+      suggestions: stringSuggestions.slice(0, 3).map(x => ({ displayName: x }))
+    });
 
     // const results = await geocode(query);
     // this.setState({
@@ -93,7 +99,9 @@ export default class MainInput extends Component {
     if (true) {
       const suggestions = this.state.suggestions.map(suggestion => (
         <Suggestion
-          key={`${suggestion.latitude} ${suggestion.longitude}`}
+          key={`${suggestion.latitude} ${suggestion.longitude} ${
+            suggestion.displayName
+          }`}
           suggestion={suggestion}
           moveMap={this.props.moveMap}
           clearSuggestions={this.clearSuggestions}
