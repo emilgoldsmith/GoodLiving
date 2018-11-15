@@ -170,7 +170,6 @@ export function getTreeSuggestions(
   if (!hasAnyMatches) return [];
 
   if (words.length === 1 && currentNode !== treeRoot) {
-    console.log(currentNode.values);
     if (currentNode.values.find(x => (x as any).stringValue === "near")) {
       console.log(words);
     }

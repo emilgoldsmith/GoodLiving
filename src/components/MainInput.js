@@ -58,25 +58,22 @@ export default class MainInput extends Component {
   };
 
   handleInputChange = event => {
-    this.setState(
-      {
-        inputValue: event.target.value
-        // We're using the callback here so we're sure state has updated before calling generateSuggestions
-      },
-      this.generateSuggestions
-    );
+    const suggestions = this.generateSuggestions(event.target.value);
+    console.log(suggestions);
+    if (suggestions.length > 0) {
+      this.setState({
+        inputValue: event.target.value,
+        suggestions: suggestions.slice(0, 3)
+      });
+    }
   };
 
-  generateSuggestions = async () => {
-    const query = this.state.inputValue;
+  generateSuggestions(query) {
     const suggestions = getTreeSuggestions(query.split(" ").filter(x => x));
     const stringSuggestions = suggestions.map(
       x => x.stringValue || x.placeholder
     );
-    console.log(stringSuggestions);
-    this.setState({
-      suggestions: stringSuggestions.slice(0, 3).map(x => ({ displayName: x }))
-    });
+    return stringSuggestions.map(x => ({ displayName: x }));
 
     // const results = await geocode(query);
     // this.setState({
@@ -87,7 +84,7 @@ export default class MainInput extends Component {
     //     longitude: singleResult.lon
     //   }))
     // });
-  };
+  }
 
   clearSuggestions = () => {
     this.setState({
