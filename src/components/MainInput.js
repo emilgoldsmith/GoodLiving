@@ -124,7 +124,7 @@ export default class MainInput extends Component {
             value={this.state.inputValue}
             onChange={this.handleInputChange}
             onFocus={this.handleInputChange}
-            placeholder="What are you looking for?"
+            placeholder="What are your preferences?"
             onKeyUp={this.handleInputSubmit}
           />
         );

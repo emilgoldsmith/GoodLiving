@@ -170,9 +170,6 @@ export function getTreeSuggestions(
   if (!hasAnyMatches) return [];
 
   if (words.length === 0 || (words.length === 1 && currentNode !== treeRoot)) {
-    if (currentNode.values.find(x => (x as any).stringValue === "near")) {
-      console.log(words);
-    }
     let suggestions: TreeValue[] = [];
     if (hasFullMatches && currentNode.children) {
       suggestions = suggestions.concat(
