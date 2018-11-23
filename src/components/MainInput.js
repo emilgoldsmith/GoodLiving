@@ -59,31 +59,31 @@ export default class MainInput extends Component {
   };
 
   handleInputChange = event => {
-    const suggestions = this.generateSuggestions(event.target.value);
-    if (suggestions.length > 0 || event.target.value === "") {
-      this.setState({
-        inputValue: event.target.value,
-        suggestions: suggestions.slice(0, 3)
-      });
-    }
+    this.setState(
+      {
+        inputValue: event.target.value
+        // We're using the callback here so we're sure state has updated before calling generateSuggestions
+      },
+      this.generateSuggestions
+    );
   };
 
-  generateSuggestions(query) {
-    const suggestions = getTreeSuggestions(query.split(" ").filter(x => x));
-    const stringSuggestions = suggestions.map(
-      x => x.stringValue || x.placeholder
-    );
-    return stringSuggestions.map(x => ({ displayName: x }));
+  async generateSuggestions() {
+    // const suggestions = getTreeSuggestions(query.split(" ").filter(x => x));
+    // const stringSuggestions = suggestions.map(
+    //   x => x.stringValue || x.placeholder
+    // );
+    // return stringSuggestions.map(x => ({ displayName: x }));
 
-    // const results = await geocode(query);
-    // this.setState({
-    //   suggestions: results.slice(0, 3).map(singleResult => ({
-    //     displayName: singleResult.display_name,
-    //     boundingBox: singleResult.boundingbox,
-    //     latitude: singleResult.lat,
-    //     longitude: singleResult.lon
-    //   }))
-    // });
+    const results = await geocode(this.state.inputValue);
+    this.setState({
+      suggestions: results.slice(0, 3).map(singleResult => ({
+        displayName: singleResult.display_name,
+        boundingBox: singleResult.boundingbox,
+        latitude: singleResult.lat,
+        longitude: singleResult.lon
+      }))
+    });
   }
 
   clearSuggestions = () => {
