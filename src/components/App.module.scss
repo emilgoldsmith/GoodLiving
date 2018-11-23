@@ -2,9 +2,9 @@
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: auto 400px;
+  grid-template-columns: 400px auto 400px;
   grid-template-rows: auto;
-  grid-template-areas: "map sidebar";
+  grid-template-areas: "leftsidebar map rightsidebar";
 }
 
 .map {
@@ -14,7 +14,6 @@
 .sidebarContainer {
   display: flex;
   flex-direction: column;
-  grid-area: "sidebar";
   background-color: rgb(245, 245, 245);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   > * {
@@ -23,6 +22,16 @@
   }
   max-height: 100%;
   max-width: 100%;
+}
+
+.rightSidebarContainer {
+  @extend .sidebarContainer;
+  grid-area: rightsidebar;
+}
+
+.leftSidebarContainer {
+  @extend .sidebarContainer;
+  grid-area: leftsidebar;
 }
 
 .propertiesContainer {

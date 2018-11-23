@@ -115,12 +115,11 @@ class App extends Component {
     let x = 0;
     return (
       <div className={styles.appContainer}>
-        <div className={styles.map} id="map">
-          <div className={styles.topContainer}>
-            <MainInput moveMap={this.moveMap} />
-          </div>
+        <div className={styles.leftSidebarContainer}>
+          <MainInput moveMap={this.moveMap} />
         </div>
-        <div className={styles.sidebarContainer}>
+        <div className={styles.map} id="map" />
+        <div className={styles.rightSidebarContainer}>
           <div className={styles.propertiesContainer}>
             <div className={styles.propertiesHeaderContainer}>
               <h2>Results</h2>
