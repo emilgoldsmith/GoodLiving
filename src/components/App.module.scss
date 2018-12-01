@@ -28,6 +28,15 @@
   position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
+  * {
+    pointer-events: auto;
+  }
+
+  &,
+  * {
+    z-index: 1000;
+  }
 }
 
 .sidebarContainer {
@@ -89,10 +98,6 @@
 .topContainer {
   display: flex;
   padding-top: 3vh;
-  &,
-  * {
-    z-index: 1000;
-  }
 }
 
 .filtersContainer {
@@ -186,4 +191,35 @@
 .growingFlex {
   flex-grow: 1;
   margin: auto;
+}
+
+.currentLocationButton {
+  /* Reset button style */
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  overflow: visible;
+  padding: 0;
+  -webkit-appearance: button; /* for input */
+  -webkit-user-select: none; /* for button */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+
+  i {
+    background: lightgrey;
+    border: solid darkgrey;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.5em;
+  }
 }

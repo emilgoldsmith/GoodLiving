@@ -112,6 +112,10 @@ class App extends Component {
     });
   }
 
+  locate = () => {
+    this.map.locate({ setView: true, maxZoom: 14 });
+  };
+
   render() {
     let x = 0;
     return (
@@ -127,6 +131,12 @@ class App extends Component {
                 ))}
               </div>
             </div>
+            <button
+              onClick={this.locate}
+              className={styles.currentLocationButton}
+            >
+              <i className="fas fa-location-arrow" />
+            </button>
           </div>
         </div>
         <div className={styles.sidebarContainer}>
