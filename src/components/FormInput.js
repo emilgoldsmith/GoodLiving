@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styles from "./FormInput.module.scss";
 
+const SUGGESTIONS = ["abc", "def", "absafdsa", "dummy1", "dummy2"];
+
 export default class FormInput extends Component {
   constructor(props) {
     super(props);
@@ -8,6 +10,9 @@ export default class FormInput extends Component {
   }
 
   render() {
+    const suggestions = SUGGESTIONS.filter(x =>
+      x.startsWith(this.state.inputValue)
+    ).map(x => <div key={x}>{x}</div>);
     return (
       <div className={styles.inputContainer}>
         <input
@@ -20,11 +25,7 @@ export default class FormInput extends Component {
           onBlur={() => this.setState({ displaySuggestions: false })}
         />
         {this.state.displaySuggestions && (
-          <div className={styles.suggestionsContainer}>
-            {new Array(10).fill(0).map(x => (
-              <div key={Math.random()}>Dummy</div>
-            ))}
-          </div>
+          <div className={styles.suggestionsContainer}>{suggestions}</div>
         )}
       </div>
     );
