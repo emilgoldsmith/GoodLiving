@@ -116,12 +116,17 @@ class App extends Component {
     let x = 0;
     return (
       <div className={styles.appContainer}>
-        <div className={styles.map} id="map">
-          <div className={styles.topContainer}>
-            <MainInput moveMap={this.moveMap} />
-            {new Array(4).fill(0).map(x => (
-              <FormInput />
-            ))}
+        <div className={styles.mapContainer}>
+          <div className={styles.map} id="map" />
+          <div className={styles.mapOverlayContainer}>
+            <div className={styles.topContainer}>
+              <MainInput moveMap={this.moveMap} />
+              <div className={styles.formContainer}>
+                {new Array(4).fill(0).map(x => (
+                  <FormInput key={Math.random()} />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         <div className={styles.sidebarContainer}>

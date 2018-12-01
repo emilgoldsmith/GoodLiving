@@ -7,8 +7,27 @@
   grid-template-areas: "map sidebar";
 }
 
-.map {
+.formContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mapContainer {
   grid-area: "map";
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.mapOverlayContainer {
+  width: calc(100vw - 450px);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .sidebarContainer {
