@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styles from "./App.module.scss";
 import { queryAirbnb } from "../api/airbnb/airbnb-client";
+import { getOSMDataWithinBoundary } from "../api/overpass/overpass-client";
 import MainInput from "./MainInput";
 import FormInput from "./FormInput";
 
@@ -105,6 +106,13 @@ class App extends Component {
       const { lng: swLong, lat: swLat } = bounds.getSouthWest();
       const { lng: neLong, lat: neLat } = bounds.getNorthEast();
       const results = await queryAirbnb(swLat, swLong, neLat, neLong);
+      const restaurants = await getOSMDataWithinBoundary(
+        swLat,
+        swLong,
+        neLat,
+        neLong
+      );
+      console.log(restaurants);
       updateResults(results);
       this.setState({
         results: results.slice(0, 10)
