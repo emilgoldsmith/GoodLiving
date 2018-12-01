@@ -4,7 +4,7 @@ import styles from "./FormInput.module.scss";
 export default class FormInput extends Component {
   constructor(props) {
     super(props);
-    this.state = { inputValue: "" };
+    this.state = { inputValue: "", displaySuggestions: false };
   }
 
   render() {
@@ -16,12 +16,16 @@ export default class FormInput extends Component {
           className={styles.input}
           placeholder="Select attribute"
           onChange={e => this.setState({ inputValue: e.target.value })}
+          onFocus={() => this.setState({ displaySuggestions: true })}
+          onBlur={() => this.setState({ displaySuggestions: false })}
         />
-        <div className={styles.suggestionsContainer}>
-          {new Array(10).fill(0).map(x => (
-            <div key={Math.random()}>Dummy</div>
-          ))}
-        </div>
+        {this.state.displaySuggestions && (
+          <div className={styles.suggestionsContainer}>
+            {new Array(10).fill(0).map(x => (
+              <div key={Math.random()}>Dummy</div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
