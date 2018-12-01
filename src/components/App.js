@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styles from "./App.module.scss";
 import { queryAirbnb } from "../api/airbnb/airbnb-client";
 import MainInput from "./MainInput";
+import FormInput from "./FormInput";
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -118,6 +119,9 @@ class App extends Component {
         <div className={styles.map} id="map">
           <div className={styles.topContainer}>
             <MainInput moveMap={this.moveMap} />
+            {new Array(4).fill(0).map(x => (
+              <FormInput />
+            ))}
           </div>
         </div>
         <div className={styles.sidebarContainer}>

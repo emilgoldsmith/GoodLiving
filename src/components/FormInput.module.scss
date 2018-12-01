@@ -1,0 +1,17 @@
+.inputContainer {
+  max-width: 150px;
+  margin-right: 20px;
+}
+
+.input {
+  height: 2em;
+  max-width: inherit;
+}
+
+.suggestionsContainer {
+  background: white;
+  margin: 3px;
+  border: solid darkgrey;
+  max-height: 8em;
+  overflow-y: auto;
+}
