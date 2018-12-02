@@ -61,7 +61,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      results: []
+      results: [],
+      restaurants: []
     };
   }
 
@@ -105,17 +106,16 @@ class App extends Component {
       const bounds = this.map.getBounds();
       const { lng: swLong, lat: swLat } = bounds.getSouthWest();
       const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-      const results = await queryAirbnb(swLat, swLong, neLat, neLong);
-      const restaurants = await getOSMDataWithinBoundary(
-        swLat,
-        swLong,
-        neLat,
-        neLong
-      );
-      console.log(restaurants);
+      const [results, restaurants] = await Promise.all([
+        queryAirbnb(swLat, swLong, neLat, neLong),
+        getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
+      ]);
       updateResults(results);
       this.setState({
-        results: results.slice(0, 10)
+        results: results.slice(0, 10),
+        restaurants: restaurants
+          .map(x => x.properties["name:en"] || x.properties.name)
+          .filter(x => x)
       });
     });
   }
@@ -134,9 +134,14 @@ class App extends Component {
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
               <div className={styles.formContainer}>
-                {new Array(4).fill(0).map(x => (
-                  <FormInput key={Math.random()} />
-                ))}
+                <FormInput
+                  placeholder="Which restaurant do you like?"
+                  data={this.state.restaurants}
+                />
+                <FormInput
+                  placeholder="Dummy for testing"
+                  data={["abc", "def", "absafdsa", "dummy1", "dummy2"]}
+                />
               </div>
             </div>
             <button

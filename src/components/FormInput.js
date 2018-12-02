@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styles from "./FormInput.module.scss";
-
-const SUGGESTIONS = ["abc", "def", "absafdsa", "dummy1", "dummy2"];
+import _ from "lodash";
 
 export default class FormInput extends Component {
   constructor(props) {
@@ -10,16 +9,19 @@ export default class FormInput extends Component {
   }
 
   render() {
-    const suggestions = SUGGESTIONS.filter(x =>
-      x.startsWith(this.state.inputValue)
-    ).map(x => <div key={x}>{x}</div>);
+    const suggestions = _.uniq(this.props.data)
+      .sort()
+      .filter(x =>
+        x.toLowerCase().startsWith(this.state.inputValue.toLowerCase())
+      )
+      .map(x => <div key={x}>{x}</div>);
     return (
       <div className={styles.inputContainer}>
         <input
           list="autocomplete"
           value={this.state.inputValue}
           className={styles.input}
-          placeholder="Select attribute"
+          placeholder={this.props.placeholder}
           onChange={e => this.setState({ inputValue: e.target.value })}
           onFocus={() => this.setState({ displaySuggestions: true })}
           onBlur={() => this.setState({ displaySuggestions: false })}
