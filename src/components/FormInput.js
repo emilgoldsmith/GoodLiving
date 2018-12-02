@@ -9,12 +9,14 @@ export default class FormInput extends Component {
   }
 
   render() {
-    const suggestions = _.uniq(this.props.data)
+    const suggestions = _.uniq(this.props.data.map(x => x.toLowerCase()))
       .sort()
-      .filter(x =>
-        x.toLowerCase().startsWith(this.state.inputValue.toLowerCase())
-      )
-      .map(x => <div key={x}>{x}</div>);
+      .filter(x => x.startsWith(this.state.inputValue.toLowerCase()))
+      .map(x => (
+        <div className={styles.suggestion} key={x}>
+          {_.startCase(x)}
+        </div>
+      ));
     return (
       <div className={styles.inputContainer}>
         <input
@@ -26,7 +28,7 @@ export default class FormInput extends Component {
           onFocus={() => this.setState({ displaySuggestions: true })}
           onBlur={() => this.setState({ displaySuggestions: false })}
         />
-        {this.state.displaySuggestions && (
+        {this.state.displaySuggestions && suggestions.length > 0 && (
           <div className={styles.suggestionsContainer}>{suggestions}</div>
         )}
       </div>
