@@ -64,6 +64,12 @@ class App extends Component {
       results: [],
       restaurants: []
     };
+
+    this.youAreHereIcon = L.icon({
+      iconUrl: `${process.env.PUBLIC_URL}/you-are-here.png`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 40]
+    });
   }
 
   moveMap = boundingbox => {
@@ -79,6 +85,14 @@ class App extends Component {
     /* global L:false */
     // 'map' is the id of the div where map is going to go
     this.map = L.map("map").locate({ setView: true, maxZoom: 14 });
+    this.map.on("locationfound", async event => {
+      if (this.youAreHereMarker) {
+        this.youAreHereMarker.remove();
+      }
+      this.youAreHereMarker = L.marker(event.latlng, {
+        icon: this.youAreHereIcon
+      }).addTo(this.map);
+    });
     L.tileLayer(
       "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
       {
