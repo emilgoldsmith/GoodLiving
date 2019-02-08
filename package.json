@@ -23,6 +23,7 @@
     "react": "^16.5.2",
     "react-datepicker": "^2.1.0",
     "react-dom": "^16.5.2",
+    "react-numeric-input": "^2.2.3",
     "react-scripts": "^2.1.1",
     "request-promise-native": "^1.0.5",
     "typescript": "^3.1.6"
@@ -48,6 +49,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/moment": "^2.13.0"
+    "@types/moment": "^2.13.0",
+    "@types/react-numeric-input": "^2.2.3"
   }
 }

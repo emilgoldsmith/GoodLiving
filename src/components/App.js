@@ -7,6 +7,7 @@ import FormInput from "./FormInput";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import * as NumericInput from "react-numeric-input";
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -178,6 +179,7 @@ class App extends Component {
                   endDate={this.state.maxDate.toDate()}
                   onChange={this.handleDateChangeEnd}
                 />
+                <NumericInput min={0} format={x => `${x}$`} />
                 <FormInput
                   placeholder="Which restaurant do you like?"
                   data={this.state.restaurants}
