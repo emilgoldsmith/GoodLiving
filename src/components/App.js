@@ -4,6 +4,9 @@ import { queryAirbnb } from "../api/airbnb/airbnb-client";
 import { getOSMDataWithinBoundary } from "../api/overpass/overpass-client";
 import MainInput from "./MainInput";
 import FormInput from "./FormInput";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -62,7 +65,9 @@ class App extends Component {
     super(props);
     this.state = {
       results: [],
-      restaurants: []
+      restaurants: [],
+      minDate: moment(),
+      maxDate: moment().add(1, "day")
     };
 
     this.youAreHereIcon = L.icon({
@@ -138,6 +143,15 @@ class App extends Component {
     this.map.locate({ setView: true, maxZoom: 14 });
   };
 
+  handleDateChangeStart = newStart => {
+    this.setState({ minDate: moment(newStart) });
+    if (moment(newStart).isAfter(this.state.endDate)) {
+      this.setState({ maxDate: moment(newStart) });
+    }
+  };
+
+  handleDateChangeEnd = newEnd => this.setState({ maxDate: moment(newEnd) });
+
   render() {
     let x = 0;
     return (
@@ -148,6 +162,22 @@ class App extends Component {
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
               <div className={styles.formContainer}>
+                <DatePicker
+                  minDate={new Date()}
+                  selectsStart
+                  selected={this.state.minDate.toDate()}
+                  startDate={this.state.minDate.toDate()}
+                  endDate={this.state.maxDate.toDate()}
+                  onChange={this.handleDateChangeStart}
+                />
+                <DatePicker
+                  minDate={this.state.minDate.toDate()}
+                  selectsEnd
+                  selected={this.state.maxDate.toDate()}
+                  startDate={this.state.minDate.toDate()}
+                  endDate={this.state.maxDate.toDate()}
+                  onChange={this.handleDateChangeEnd}
+                />
                 <FormInput
                   placeholder="Which restaurant do you like?"
                   data={this.state.restaurants}
