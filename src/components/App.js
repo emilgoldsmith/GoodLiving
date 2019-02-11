@@ -174,7 +174,7 @@ class App extends Component {
           <div className={styles.mapOverlayContainer}>
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
-              <div>
+              <div className={styles.clickThroughContainer}>
                 <div className={styles.formContainer}>
                   <DatePicker
                     minDate={new Date()}
