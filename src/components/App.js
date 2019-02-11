@@ -228,8 +228,8 @@ class App extends Component {
                     size="5"
                     placeholder="Max Price"
                   />
-                  <select>
-                    <option value="" disabled selected>
+                  <select defaultValue="">
+                    <option value="" disabled>
                       Choose Accommodation Type
                     </option>
                     <option value="apartment">Apartment</option>
