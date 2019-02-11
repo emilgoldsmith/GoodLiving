@@ -174,63 +174,71 @@ class App extends Component {
           <div className={styles.mapOverlayContainer}>
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
-              <div className={styles.formContainer}>
-                <DatePicker
-                  minDate={new Date()}
-                  selectsStart
-                  selected={this.state.minDate && this.state.minDate.toDate()}
-                  startDate={this.state.minDate && this.state.minDate.toDate()}
-                  endDate={this.state.maxDate && this.state.maxDate.toDate()}
-                  onChange={this.handleDateChangeStart}
-                  placeholderText="📅 Arrival"
-                  dateFormat="📅 do of MMM YYYY"
-                  customInput={<input type="text" size="10" />}
-                />
-                <DatePicker
-                  minDate={this.state.minDate && this.state.minDate.toDate()}
-                  selectsEnd
-                  selected={this.state.maxDate && this.state.maxDate.toDate()}
-                  startDate={this.state.minDate && this.state.minDate.toDate()}
-                  endDate={this.state.maxDate && this.state.maxDate.toDate()}
-                  onChange={this.handleDateChangeEnd}
-                  placeholderText="📅 Departure"
-                  dateFormat="📅 do of MMM YYYY"
-                  customInput={<input type="text" size="10" />}
-                />
-                <NumericInput
-                  min={1}
-                  format={x => `👥 ${x} guest${x > 1 ? "s" : ""}`}
-                  parse={x => (x.match(/(\d+)/) && x.match(/(\d+)/)[1]) || 1}
-                  value={this.state.numGuests}
-                  onChange={this.handleGuestsChanged}
-                  size="5"
-                />
-                <NumericInput
-                  min={0}
-                  step={10}
-                  format={x => `${x}$`}
-                  value={this.state.minPrice}
-                  onChange={this.handleMinPriceChanged}
-                  size="5"
-                  placeholder="Min Price"
-                />
-                <NumericInput
-                  min={0}
-                  step={10}
-                  format={x => `${x}$`}
-                  value={this.state.maxPrice}
-                  onChange={this.handleMaxPriceChanged}
-                  size="5"
-                  placeholder="Max Price"
-                />
-                <FormInput
-                  placeholder="Which restaurant do you like?"
-                  data={this.state.restaurants}
-                />
-                <FormInput
-                  placeholder="Dummy for testing"
-                  data={["abc", "def", "absafdsa", "dummy1", "dummy2"]}
-                />
+              <div>
+                <div className={styles.formContainer}>
+                  <DatePicker
+                    minDate={new Date()}
+                    selectsStart
+                    selected={this.state.minDate && this.state.minDate.toDate()}
+                    startDate={
+                      this.state.minDate && this.state.minDate.toDate()
+                    }
+                    endDate={this.state.maxDate && this.state.maxDate.toDate()}
+                    onChange={this.handleDateChangeStart}
+                    placeholderText="📅 Arrival"
+                    dateFormat="📅 do of MMM YYYY"
+                    customInput={<input type="text" size="10" />}
+                  />
+                  <DatePicker
+                    minDate={this.state.minDate && this.state.minDate.toDate()}
+                    selectsEnd
+                    selected={this.state.maxDate && this.state.maxDate.toDate()}
+                    startDate={
+                      this.state.minDate && this.state.minDate.toDate()
+                    }
+                    endDate={this.state.maxDate && this.state.maxDate.toDate()}
+                    onChange={this.handleDateChangeEnd}
+                    placeholderText="📅 Departure"
+                    dateFormat="📅 do of MMM YYYY"
+                    customInput={<input type="text" size="10" />}
+                  />
+                  <NumericInput
+                    min={1}
+                    format={x => `👥 ${x} guest${x > 1 ? "s" : ""}`}
+                    parse={x => (x.match(/(\d+)/) && x.match(/(\d+)/)[1]) || 1}
+                    value={this.state.numGuests}
+                    onChange={this.handleGuestsChanged}
+                    size="5"
+                  />
+                  <NumericInput
+                    min={0}
+                    step={10}
+                    format={x => `${x}$`}
+                    value={this.state.minPrice}
+                    onChange={this.handleMinPriceChanged}
+                    size="5"
+                    placeholder="Min Price"
+                  />
+                  <NumericInput
+                    min={0}
+                    step={10}
+                    format={x => `${x}$`}
+                    value={this.state.maxPrice}
+                    onChange={this.handleMaxPriceChanged}
+                    size="5"
+                    placeholder="Max Price"
+                  />
+                </div>
+                <div className={styles.formContainer}>
+                  <FormInput
+                    placeholder="Which restaurant do you like?"
+                    data={this.state.restaurants}
+                  />
+                  <FormInput
+                    placeholder="Dummy for testing"
+                    data={["abc", "def", "absafdsa", "dummy1", "dummy2"]}
+                  />
+                </div>
               </div>
             </div>
             <button

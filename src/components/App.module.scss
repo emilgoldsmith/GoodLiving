@@ -11,6 +11,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  &:not(:first-child) {
+    margin-top: 15px;
+  }
 }
 
 .mapContainer {
