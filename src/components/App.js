@@ -67,8 +67,8 @@ class App extends Component {
     this.state = {
       results: [],
       restaurants: [],
-      minDate: moment(),
-      maxDate: moment().add(1, "day")
+      minDate: null,
+      maxDate: null
     };
 
     this.youAreHereIcon = L.icon({
@@ -166,18 +166,24 @@ class App extends Component {
                 <DatePicker
                   minDate={new Date()}
                   selectsStart
-                  selected={this.state.minDate.toDate()}
-                  startDate={this.state.minDate.toDate()}
-                  endDate={this.state.maxDate.toDate()}
+                  selected={this.state.minDate && this.state.minDate.toDate()}
+                  startDate={this.state.minDate && this.state.minDate.toDate()}
+                  endDate={this.state.maxDate && this.state.maxDate.toDate()}
                   onChange={this.handleDateChangeStart}
+                  placeholderText="📅 Arrival"
+                  dateFormat="📅 do of MMM YYYY"
+                  customInput={<input type="text" size="10" />}
                 />
                 <DatePicker
-                  minDate={this.state.minDate.toDate()}
+                  minDate={this.state.minDate && this.state.minDate.toDate()}
                   selectsEnd
-                  selected={this.state.maxDate.toDate()}
-                  startDate={this.state.minDate.toDate()}
-                  endDate={this.state.maxDate.toDate()}
+                  selected={this.state.maxDate && this.state.maxDate.toDate()}
+                  startDate={this.state.minDate && this.state.minDate.toDate()}
+                  endDate={this.state.maxDate && this.state.maxDate.toDate()}
                   onChange={this.handleDateChangeEnd}
+                  placeholderText="📅 Departure"
+                  dateFormat="📅 do of MMM YYYY"
+                  customInput={<input type="text" size="10" />}
                 />
                 <NumericInput min={0} format={x => `${x}$`} />
                 <FormInput
