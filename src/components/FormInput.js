@@ -8,10 +8,20 @@ export default class FormInput extends Component {
     this.state = { inputValue: "", displaySuggestions: false };
   }
 
+  handleSuggestionClick = e =>
+    this.setState({
+      inputValue: e.target.innerText,
+      displaySuggestions: false
+    });
+
   render() {
     const suggestions = _.uniq(this.props.data.map(x => x.toLowerCase()))
       .sort()
-      .filter(x => x.startsWith(this.state.inputValue.toLowerCase()))
+      .filter(
+        x =>
+          x.startsWith(this.state.inputValue.toLowerCase()) &&
+          x !== this.state.inputValue.toLowerCase()
+      )
       .map(x => (
         <div className={styles.suggestion} key={x}>
           {_.startCase(x)}
@@ -26,10 +36,19 @@ export default class FormInput extends Component {
           placeholder={this.props.placeholder}
           onChange={e => this.setState({ inputValue: e.target.value })}
           onFocus={() => this.setState({ displaySuggestions: true })}
-          onBlur={() => this.setState({ displaySuggestions: false })}
+          onBlur={() =>
+            setTimeout(() => {
+              this.setState({ displaySuggestions: false });
+            }, 100)
+          }
         />
         {this.state.displaySuggestions && suggestions.length > 0 && (
-          <div className={styles.suggestionsContainer}>{suggestions}</div>
+          <div
+            className={styles.suggestionsContainer}
+            onClick={this.handleSuggestionClick}
+          >
+            {suggestions}
+          </div>
         )}
       </div>
     );
