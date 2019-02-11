@@ -8,6 +8,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import * as NumericInput from "react-numeric-input";
+// Overwriting default styles of NumericInput
+NumericInput.style.input = {};
+NumericInput.style["input:not(.form-control)"] = {};
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -68,7 +71,8 @@ class App extends Component {
       results: [],
       restaurants: [],
       minDate: null,
-      maxDate: null
+      maxDate: null,
+      numGuests: 1
     };
 
     this.youAreHereIcon = L.icon({
@@ -153,6 +157,8 @@ class App extends Component {
 
   handleDateChangeEnd = newEnd => this.setState({ maxDate: moment(newEnd) });
 
+  handleGuestsChanged = numGuests => this.setState({ numGuests });
+
   render() {
     let x = 0;
     return (
@@ -185,15 +191,23 @@ class App extends Component {
                   dateFormat="📅 do of MMM YYYY"
                   customInput={<input type="text" size="10" />}
                 />
-                <NumericInput min={0} format={x => `${x}$`} />
-                <FormInput
+                <NumericInput
+                  min={1}
+                  format={x => `${x} guest${x > 1 ? "s" : ""}`}
+                  parse={x => (x.match(/^(\d+)/) && x.match(/^(\d+)/)[1]) || 1}
+                  value={this.state.numGuests}
+                  onChange={this.handleGuestsChanged}
+                  size="5"
+                />
+                {/* componentClass={CustomNumericInput} */}
+                {/* <FormInput
                   placeholder="Which restaurant do you like?"
                   data={this.state.restaurants}
                 />
                 <FormInput
                   placeholder="Dummy for testing"
                   data={["abc", "def", "absafdsa", "dummy1", "dummy2"]}
-                />
+                /> */}
               </div>
             </div>
             <button
