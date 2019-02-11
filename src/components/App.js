@@ -193,8 +193,8 @@ class App extends Component {
                 />
                 <NumericInput
                   min={1}
-                  format={x => `${x} guest${x > 1 ? "s" : ""}`}
-                  parse={x => (x.match(/^(\d+)/) && x.match(/^(\d+)/)[1]) || 1}
+                  format={x => `👥 ${x} guest${x > 1 ? "s" : ""}`}
+                  parse={x => (x.match(/(\d+)/) && x.match(/(\d+)/)[1]) || 1}
                   value={this.state.numGuests}
                   onChange={this.handleGuestsChanged}
                   size="5"
