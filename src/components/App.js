@@ -228,6 +228,13 @@ class App extends Component {
                     size="5"
                     placeholder="Max Price"
                   />
+                  <select>
+                    <option value="" disabled selected>
+                      Choose Accommodation Type
+                    </option>
+                    <option value="apartment">Apartment</option>
+                    <option value="house">House</option>
+                  </select>
                 </div>
                 <div className={styles.formContainer}>
                   <FormInput
