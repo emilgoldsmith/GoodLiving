@@ -10,6 +10,7 @@
 .formContainer {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .mapContainer {
@@ -98,7 +99,7 @@
 .topContainer {
   display: flex;
   padding-top: 3vh;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .filtersContainer {

@@ -223,15 +223,14 @@ class App extends Component {
                   size="5"
                   placeholder="Max Price"
                 />
-                {/* componentClass={CustomNumericInput} */}
-                {/* <FormInput
+                <FormInput
                   placeholder="Which restaurant do you like?"
                   data={this.state.restaurants}
                 />
                 <FormInput
                   placeholder="Dummy for testing"
                   data={["abc", "def", "absafdsa", "dummy1", "dummy2"]}
-                /> */}
+                />
               </div>
             </div>
             <button
