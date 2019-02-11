@@ -72,7 +72,9 @@ class App extends Component {
       restaurants: [],
       minDate: null,
       maxDate: null,
-      numGuests: 1
+      numGuests: 1,
+      minPrice: "",
+      maxPrice: ""
     };
 
     this.youAreHereIcon = L.icon({
@@ -159,6 +161,10 @@ class App extends Component {
 
   handleGuestsChanged = numGuests => this.setState({ numGuests });
 
+  handleMinPriceChanged = minPrice => this.setState({ minPrice });
+
+  handleMaxPriceChanged = maxPrice => this.setState({ maxPrice });
+
   render() {
     let x = 0;
     return (
@@ -198,6 +204,24 @@ class App extends Component {
                   value={this.state.numGuests}
                   onChange={this.handleGuestsChanged}
                   size="5"
+                />
+                <NumericInput
+                  min={0}
+                  step={10}
+                  format={x => `${x}$`}
+                  value={this.state.minPrice}
+                  onChange={this.handleMinPriceChanged}
+                  size="5"
+                  placeholder="Min Price"
+                />
+                <NumericInput
+                  min={0}
+                  step={10}
+                  format={x => `${x}$`}
+                  value={this.state.maxPrice}
+                  onChange={this.handleMaxPriceChanged}
+                  size="5"
+                  placeholder="Max Price"
                 />
                 {/* componentClass={CustomNumericInput} */}
                 {/* <FormInput
