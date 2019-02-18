@@ -6,12 +6,13 @@ export async function queryAirbnb(
   minPrice,
   maxPrice,
   minDate,
-  maxDate
+  maxDate,
+  guests
 ) {
   const res = await fetch(
     `/api/query-airbnb?swLat=${swLat}&swLong=${swLong}&neLat=${neLat}&neLong=${neLong}&minPrice=${minPrice ||
       0}&maxPrice=${maxPrice ||
-      1000 * 1000}&minDate=${minDate}&maxDate=${maxDate}`
+      1000 * 1000}&minDate=${minDate}&maxDate=${maxDate}&guests=${guests}`
   );
   return res.json();
 }

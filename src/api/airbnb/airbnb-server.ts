@@ -10,7 +10,8 @@ export function setupAirbnbRoute(router) {
       req.query.maxPrice,
       req.query.minPrice,
       req.query.minDate,
-      req.query.maxDate
+      req.query.maxDate,
+      req.query.guests
     );
     res.json(locations);
   });
@@ -24,7 +25,8 @@ function queryAirbnb(
   maxPrice,
   minPrice,
   minDate,
-  maxDate
+  maxDate,
+  guests
 ) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
@@ -36,7 +38,8 @@ function queryAirbnb(
       maxPrice,
       minPrice,
       minDate,
-      maxDate
+      maxDate,
+      guests
     )
   }).then(response => {
     const parsedResponse = JSON.parse(response);
@@ -74,7 +77,8 @@ function getQueryString(
   maxPrice,
   minPrice,
   minDate,
-  maxDate
+  maxDate,
+  guests
 ) {
   return {
     sw_lat: swLat.toString(),
@@ -85,7 +89,7 @@ function getQueryString(
     price_min: minPrice.toString(),
     checkin: minDate,
     checkout: maxDate,
-
+    adults: guests.toString(),
     // These could possibly be interesting to look at later
     experiences_per_grid: "20",
     items_per_grid: "18",

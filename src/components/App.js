@@ -118,7 +118,8 @@ class App extends Component {
           : "",
         moment(this.state.maxDate).isValid()
           ? moment(this.state.maxDate).format("YYYY-MM-DD")
-          : ""
+          : "",
+        this.state.numGuests
       ),
       getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
     ]);
@@ -166,21 +167,27 @@ class App extends Component {
   };
 
   handleDateChangeStart = newStart => {
-    this.updateMap();
-    this.setState({ minDate: moment(newStart) });
     if (moment(newStart).isAfter(this.state.endDate)) {
-      this.setState({ maxDate: moment(newStart) });
+      this.setState(
+        { minDate: moment(newStart), maxDate: moment(newStart) },
+        this.updateMap
+      );
+    } else {
+      this.setState({ minDate: moment(newStart) }, this.updateMap);
     }
   };
 
   handleDateChangeEnd = newEnd =>
-    this.updateMap() && this.setState({ maxDate: moment(newEnd) });
+    this.setState({ maxDate: moment(newEnd) }, this.updateMap);
 
-  handleGuestsChanged = numGuests => this.setState({ numGuests });
+  handleGuestsChanged = numGuests =>
+    this.setState({ numGuests }, this.updateMap);
 
-  handleMinPriceChanged = minPrice => this.setState({ minPrice });
+  handleMinPriceChanged = minPrice =>
+    this.setState({ minPrice }, this.updateMap);
 
-  handleMaxPriceChanged = maxPrice => this.setState({ maxPrice });
+  handleMaxPriceChanged = maxPrice =>
+    this.setState({ maxPrice }, this.updateMap);
 
   render() {
     let x = 0;
@@ -192,7 +199,7 @@ class App extends Component {
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
               <div className={styles.clickThroughContainer}>
-                <div onChange={this.updateMap} className={styles.formContainer}>
+                <div className={styles.formContainer}>
                   <DatePicker
                     minDate={new Date()}
                     selectsStart
