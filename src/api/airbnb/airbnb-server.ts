@@ -6,20 +6,15 @@ export function setupAirbnbRoute(router) {
       req.query.swLat,
       req.query.swLong,
       req.query.neLat,
-      req.query.neLong
+      req.query.neLong,
+      req.query.maxPrice,
+      req.query.minPrice
     );
     res.json(locations);
   });
 }
 
-function queryAirbnb(
-  swLat,
-  swLong,
-  neLat,
-  neLong,
-  maxPrice = 1000 * 1000 * 1000,
-  minPrice = 0
-) {
+function queryAirbnb(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
     qs: getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice)

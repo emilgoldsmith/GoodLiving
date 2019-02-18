@@ -92,6 +92,39 @@ class App extends Component {
     this.map.fitBounds(latLngBounds);
   };
 
+  updateResults = locations => {
+    this.markers.forEach(oldMarker => oldMarker.remove());
+    this.markers = locations.map(singleLocation =>
+      L.marker([singleLocation.latitude, singleLocation.longitude]).addTo(
+        this.map
+      )
+    );
+  };
+
+  updateMap = async event => {
+    const bounds = this.map.getBounds();
+    const { lng: swLong, lat: swLat } = bounds.getSouthWest();
+    const { lng: neLong, lat: neLat } = bounds.getNorthEast();
+    const [results, restaurants] = await Promise.all([
+      queryAirbnb(
+        swLat,
+        swLong,
+        neLat,
+        neLong,
+        this.state.minPrice,
+        this.state.maxPrice
+      ),
+      getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
+    ]);
+    this.updateResults(results);
+    this.setState({
+      results: results.slice(0, 10),
+      restaurants: restaurants
+        .map(x => x.properties["name:en"] || x.properties.name)
+        .filter(x => x)
+    });
+  };
+
   componentDidMount() {
     // L is the LeafletJS variable
     /* global L:false */
@@ -119,31 +152,7 @@ class App extends Component {
 
     this.markers = [];
 
-    const updateResults = locations => {
-      this.markers.forEach(oldMarker => oldMarker.remove());
-      this.markers = locations.map(singleLocation =>
-        L.marker([singleLocation.latitude, singleLocation.longitude]).addTo(
-          this.map
-        )
-      );
-    };
-
-    this.map.on("moveend", async event => {
-      const bounds = this.map.getBounds();
-      const { lng: swLong, lat: swLat } = bounds.getSouthWest();
-      const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-      const [results, restaurants] = await Promise.all([
-        queryAirbnb(swLat, swLong, neLat, neLong),
-        getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
-      ]);
-      updateResults(results);
-      this.setState({
-        results: results.slice(0, 10),
-        restaurants: restaurants
-          .map(x => x.properties["name:en"] || x.properties.name)
-          .filter(x => x)
-      });
-    });
+    this.map.on("moveend", this.updateMap);
   }
 
   locate = () => {
@@ -175,7 +184,7 @@ class App extends Component {
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
               <div className={styles.clickThroughContainer}>
-                <div className={styles.formContainer}>
+                <div onChange={this.updateMap} className={styles.formContainer}>
                   <DatePicker
                     minDate={new Date()}
                     selectsStart
