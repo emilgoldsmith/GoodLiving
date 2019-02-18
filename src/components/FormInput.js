@@ -30,17 +30,12 @@ export default class FormInput extends Component {
     return (
       <div className={styles.inputContainer}>
         <input
-          list="autocomplete"
           value={this.state.inputValue}
           className={styles.input}
           placeholder={this.props.placeholder}
           onChange={e => this.setState({ inputValue: e.target.value })}
           onFocus={() => this.setState({ displaySuggestions: true })}
-          onBlur={() =>
-            setTimeout(() => {
-              this.setState({ displaySuggestions: false });
-            }, 100)
-          }
+          onBlur={() => this.setState({ displaySuggestions: false })}
         />
         {this.state.displaySuggestions && suggestions.length > 0 && (
           <div
