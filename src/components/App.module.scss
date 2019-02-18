@@ -234,3 +234,11 @@
     font-size: 1.5em;
   }
 }
+
+// We are overriding some styles on the react range here
+.reactRange {
+  width: auto !important;
+  flex-grow: 1 !important;
+  flex-basis: 150px !important;
+  margin: 3px 21px 20px 13px !important;
+}

@@ -8,6 +8,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import * as NumericInput from "react-numeric-input";
+import { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 // Overwriting default styles of NumericInput
 NumericInput.style.input = {};
 NumericInput.style["input:not(.form-control)"] = {};
@@ -73,8 +75,8 @@ class App extends Component {
       minDate: null,
       maxDate: null,
       numGuests: 1,
-      minPrice: "",
-      maxPrice: ""
+      minPrice: 0,
+      maxPrice: 1000
     };
 
     this.youAreHereIcon = L.icon({
@@ -183,11 +185,12 @@ class App extends Component {
   handleGuestsChanged = numGuests =>
     this.setState({ numGuests }, this.updateMap);
 
-  handleMinPriceChanged = minPrice =>
-    this.setState({ minPrice }, this.updateMap);
-
-  handleMaxPriceChanged = maxPrice =>
-    this.setState({ maxPrice }, this.updateMap);
+  handlePriceChanged = priceRange => {
+    this.setState(
+      { minPrice: priceRange[0], maxPrice: priceRange[1] },
+      this.updateMap
+    );
+  };
 
   render() {
     let x = 0;
@@ -234,23 +237,21 @@ class App extends Component {
                     onChange={this.handleGuestsChanged}
                     size="5"
                   />
-                  <NumericInput
+                  <Range
+                    className={styles.reactRange}
                     min={0}
-                    step={10}
-                    format={x => `${x}$`}
-                    value={this.state.minPrice}
-                    onChange={this.handleMinPriceChanged}
-                    size="5"
-                    placeholder="Min Price"
-                  />
-                  <NumericInput
-                    min={0}
-                    step={10}
-                    format={x => `${x}$`}
-                    value={this.state.maxPrice}
-                    onChange={this.handleMaxPriceChanged}
-                    size="5"
-                    placeholder="Max Price"
+                    max={1000}
+                    count={1}
+                    pushable
+                    value={[this.state.minPrice, this.state.maxPrice]}
+                    onChange={this.handlePriceChanged}
+                    marks={{
+                      0: "0$",
+                      250: "250$",
+                      500: "500$",
+                      750: "750$",
+                      1000: "1000$"
+                    }}
                   />
                   <select defaultValue="">
                     <option value="" disabled>
