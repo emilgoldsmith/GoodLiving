@@ -112,7 +112,13 @@ class App extends Component {
         neLat,
         neLong,
         this.state.minPrice,
-        this.state.maxPrice
+        this.state.maxPrice,
+        moment(this.state.minDate).isValid()
+          ? moment(this.state.minDate).format("YYYY-MM-DD")
+          : "",
+        moment(this.state.maxDate).isValid()
+          ? moment(this.state.maxDate).format("YYYY-MM-DD")
+          : ""
       ),
       getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
     ]);
@@ -160,13 +166,15 @@ class App extends Component {
   };
 
   handleDateChangeStart = newStart => {
+    this.updateMap();
     this.setState({ minDate: moment(newStart) });
     if (moment(newStart).isAfter(this.state.endDate)) {
       this.setState({ maxDate: moment(newStart) });
     }
   };
 
-  handleDateChangeEnd = newEnd => this.setState({ maxDate: moment(newEnd) });
+  handleDateChangeEnd = newEnd =>
+    this.updateMap() && this.setState({ maxDate: moment(newEnd) });
 
   handleGuestsChanged = numGuests => this.setState({ numGuests });
 

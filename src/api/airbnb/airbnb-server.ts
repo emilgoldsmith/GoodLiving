@@ -8,16 +8,36 @@ export function setupAirbnbRoute(router) {
       req.query.neLat,
       req.query.neLong,
       req.query.maxPrice,
-      req.query.minPrice
+      req.query.minPrice,
+      req.query.minDate,
+      req.query.maxDate
     );
     res.json(locations);
   });
 }
 
-function queryAirbnb(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
+function queryAirbnb(
+  swLat,
+  swLong,
+  neLat,
+  neLong,
+  maxPrice,
+  minPrice,
+  minDate,
+  maxDate
+) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
-    qs: getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice)
+    qs: getQueryString(
+      swLat,
+      swLong,
+      neLat,
+      neLong,
+      maxPrice,
+      minPrice,
+      minDate,
+      maxDate
+    )
   }).then(response => {
     const parsedResponse = JSON.parse(response);
     if (parsedResponse.explore_tabs.length !== 1) {
@@ -46,7 +66,16 @@ function queryAirbnb(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
   });
 }
 
-function getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
+function getQueryString(
+  swLat,
+  swLong,
+  neLat,
+  neLong,
+  maxPrice,
+  minPrice,
+  minDate,
+  maxDate
+) {
   return {
     sw_lat: swLat.toString(),
     sw_lng: swLong.toString(),
@@ -54,6 +83,9 @@ function getQueryString(swLat, swLong, neLat, neLong, maxPrice, minPrice) {
     ne_lng: neLong.toString(),
     price_max: maxPrice.toString(),
     price_min: minPrice.toString(),
+    checkin: minDate,
+    checkout: maxDate,
+
     // These could possibly be interesting to look at later
     experiences_per_grid: "20",
     items_per_grid: "18",
