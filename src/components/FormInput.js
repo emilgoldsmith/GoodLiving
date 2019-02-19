@@ -5,17 +5,44 @@ import _ from "lodash";
 export default class FormInput extends Component {
   constructor(props) {
     super(props);
-    this.state = { inputValue: "", displaySuggestions: false };
+    this.state = {
+      inputValue: "",
+      displaySuggestions: false,
+      suggestionPath: []
+    };
   }
 
-  handleSuggestionClick = e =>
-    this.setState({
-      inputValue: e.target.innerText,
-      displaySuggestions: false
-    });
+  getSuggestionLevel = () =>
+    this.state.suggestionPath.length > 0
+      ? _.get(this.props.data, this.state.suggestionPath)
+      : this.props.data;
+
+  handleSuggestionClick = e => {
+    const suggestionLevel = this.getSuggestionLevel();
+    if (suggestionLevel instanceof Array) {
+      this.setState({
+        inputValue: e.target.innerText,
+        displaySuggestions: false
+      });
+    } else {
+      e.persist();
+      this.setState(state => ({
+        suggestionPath: state.suggestionPath.concat([
+          e.target.innerText.toLowerCase()
+        ])
+      }));
+    }
+  };
 
   render() {
-    const suggestions = _.uniq(this.props.data.map(x => x.toLowerCase()))
+    const suggestionLevel = this.getSuggestionLevel();
+
+    const suggestionData =
+      suggestionLevel instanceof Array
+        ? _.values(suggestionLevel)
+        : _.keys(suggestionLevel);
+
+    const suggestions = _.uniq(suggestionData.map(x => x.toLowerCase()))
       .sort()
       .filter(
         x =>
@@ -35,7 +62,6 @@ export default class FormInput extends Component {
           placeholder={this.props.placeholder}
           onChange={e => this.setState({ inputValue: e.target.value })}
           onFocus={() => this.setState({ displaySuggestions: true })}
-          onBlur={() => this.setState({ displaySuggestions: false })}
         />
         {this.state.displaySuggestions && suggestions.length > 0 && (
           <div

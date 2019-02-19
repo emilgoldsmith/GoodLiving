@@ -277,12 +277,13 @@ class App extends Component {
                 </div>
                 <div className={styles.formContainer}>
                   <FormInput
-                    placeholder="Which restaurant do you like?"
-                    data={this.state.restaurants}
-                  />
-                  <FormInput
-                    placeholder="Dummy for testing"
-                    data={["abc", "def", "absafdsa", "dummy1", "dummy2"]}
+                    placeholder="What would you like to be near?"
+                    data={{
+                      restaurants: {
+                        cuisines: [],
+                        "specific restaurants": this.state.restaurants
+                      }
+                    }}
                   />
                 </div>
               </div>
