@@ -29,7 +29,8 @@ export default class FormInput extends Component {
       this.setState(state => ({
         suggestionPath: state.suggestionPath.concat([
           e.target.innerText.toLowerCase()
-        ])
+        ]),
+        inputValue: ""
       }));
     }
   };

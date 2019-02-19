@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import * as NumericInput from "react-numeric-input";
 import { Range } from "rc-slider";
+import * as _ from "lodash";
 import "rc-slider/assets/index.css";
 // Overwriting default styles of NumericInput
 NumericInput.style.input = {};
@@ -71,7 +72,7 @@ class App extends Component {
     super(props);
     this.state = {
       results: [],
-      restaurants: [],
+      nearData: {},
       minDate: null,
       maxDate: null,
       numGuests: 1,
@@ -108,7 +109,7 @@ class App extends Component {
     const bounds = this.map.getBounds();
     const { lng: swLong, lat: swLat } = bounds.getSouthWest();
     const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-    const [results, restaurants] = await Promise.all([
+    const [results, OSMData] = await Promise.all([
       queryAirbnb(
         swLat,
         swLong,
@@ -130,11 +131,20 @@ class App extends Component {
     this.updateResults(results);
     this.setState({
       results: results.slice(0, 10),
-      restaurants: restaurants
-        .map(x => x.properties["name:en"] || x.properties.name)
-        .filter(x => x)
+      nearData: this.formatOSMData(OSMData)
     });
   };
+
+  formatOSMData(OSMData) {
+    return {
+      restaurants: {
+        "specific restaurants": OSMData.map(
+          x => x.properties["name:en"] || x.properties.name
+        ).filter(x => x),
+        cuisines: OSMData.map(x => _.startCase(x.properties.cuisine))
+      }
+    };
+  }
 
   componentDidMount() {
     // L is the LeafletJS variable
@@ -278,12 +288,7 @@ class App extends Component {
                 <div className={styles.formContainer}>
                   <FormInput
                     placeholder="What would you like to be near?"
-                    data={{
-                      restaurants: {
-                        cuisines: ["yet to be populated"],
-                        "specific restaurants": this.state.restaurants
-                      }
-                    }}
+                    data={this.state.nearData}
                   />
                 </div>
               </div>
