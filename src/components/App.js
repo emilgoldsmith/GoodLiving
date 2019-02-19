@@ -76,7 +76,8 @@ class App extends Component {
       maxDate: null,
       numGuests: 1,
       minPrice: 0,
-      maxPrice: 1000
+      maxPrice: 1000,
+      roomType: "message"
     };
 
     this.youAreHereIcon = L.icon({
@@ -121,7 +122,8 @@ class App extends Component {
         moment(this.state.maxDate).isValid()
           ? moment(this.state.maxDate).format("YYYY-MM-DD")
           : "",
-        this.state.numGuests
+        this.state.numGuests,
+        this.state.roomType === "message" ? "" : this.state.roomType
       ),
       getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
     ]);
@@ -192,6 +194,9 @@ class App extends Component {
     );
   };
 
+  handleRoomTypeChanged = event =>
+    this.setState({ roomType: event.target.value }, this.updateMap);
+
   render() {
     let x = 0;
     return (
@@ -256,12 +261,18 @@ class App extends Component {
                       1000: "1000$"
                     }}
                   />
-                  <select defaultValue="">
-                    <option value="" disabled>
+                  <select
+                    value={this.state.roomType}
+                    onChange={this.handleRoomTypeChanged}
+                  >
+                    <option value="message" disabled>
                       Choose Accommodation Type
                     </option>
-                    <option value="apartment">Apartment</option>
-                    <option value="house">House</option>
+                    <option value="">Any</option>
+                    <option value="Entire home/apt">Entire Place</option>
+                    <option value="Private room">Private Room</option>
+                    <option value="Hotel room">Hotel Room</option>
+                    <option value="Shared room">Shared Room</option>
                   </select>
                 </div>
                 <div className={styles.formContainer}>
