@@ -22,3 +22,17 @@
     border-bottom: solid darkgrey;
   }
 }
+
+.buttonContainer {
+  @extend .suggestion;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 5px;
+  & > div {
+    border-radius: 3px;
+    background-color: lightgrey;
+    padding: 3px 6px;
+    cursor: pointer;
+  }
+}

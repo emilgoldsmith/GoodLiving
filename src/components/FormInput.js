@@ -34,6 +34,18 @@ export default class FormInput extends Component {
     }
   };
 
+  goBack = () => {
+    this.setState(state => ({
+      suggestionPath: state.suggestionPath.slice(
+        0,
+        state.suggestionPath.length - 1
+      )
+    }));
+  };
+
+  hideSuggestions = () =>
+    this.setState({ displaySuggestions: false, suggestionPath: [] });
+
   render() {
     const suggestionLevel = this.getSuggestionLevel();
 
@@ -50,10 +62,15 @@ export default class FormInput extends Component {
           x !== this.state.inputValue.toLowerCase()
       )
       .map(x => (
-        <div className={styles.suggestion} key={x}>
+        <div
+          className={styles.suggestion}
+          key={x}
+          onClick={this.handleSuggestionClick}
+        >
           {_.startCase(x)}
         </div>
       ));
+
     return (
       <div className={styles.inputContainer}>
         <input
@@ -63,11 +80,26 @@ export default class FormInput extends Component {
           onChange={e => this.setState({ inputValue: e.target.value })}
           onFocus={() => this.setState({ displaySuggestions: true })}
         />
-        {this.state.displaySuggestions && suggestions.length > 0 && (
-          <div
-            className={styles.suggestionsContainer}
-            onClick={this.handleSuggestionClick}
-          >
+        {this.state.displaySuggestions && (
+          <div className={styles.suggestionsContainer}>
+            <div className={styles.buttonContainer}>
+              <div
+                className={styles.backButton}
+                style={
+                  this.state.suggestionPath.length === 0
+                    ? {
+                        visibility: "hidden"
+                      }
+                    : {}
+                }
+                onClick={this.goBack}
+              >
+                {"<"}
+              </div>
+              <div className={styles.hideButton} onClick={this.hideSuggestions}>
+                {"x"}
+              </div>
+            </div>
             {suggestions}
           </div>
         )}
