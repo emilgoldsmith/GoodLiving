@@ -36,7 +36,7 @@
 
 .mapOverlayContainer {
   @extend .clickThroughContainer;
-  width: calc(100vw - 450px);
+  width: calc(100vw - 410px);
   height: 100%;
   position: absolute;
   top: 0;
@@ -241,4 +241,5 @@
   flex-grow: 1 !important;
   flex-basis: 150px !important;
   margin: 3px 21px 20px 13px !important;
+  max-width: 250px;
 }
