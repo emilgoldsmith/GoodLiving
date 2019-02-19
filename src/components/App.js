@@ -280,7 +280,7 @@ class App extends Component {
                     placeholder="What would you like to be near?"
                     data={{
                       restaurants: {
-                        cuisines: [],
+                        cuisines: ["yet to be populated"],
                         "specific restaurants": this.state.restaurants
                       }
                     }}
