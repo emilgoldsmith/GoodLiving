@@ -1,4 +1,6 @@
 import request from "request-promise-native";
+import { getAmenities } from "./amenity-cache";
+import { Listing } from "./types";
 
 export function setupAirbnbRoute(router) {
   router.get("/query-airbnb", async (req, res) => {
@@ -44,7 +46,7 @@ function queryAirbnb(
       guests,
       roomType
     )
-  }).then(response => {
+  }).then(async response => {
     const parsedResponse = JSON.parse(response);
     if (parsedResponse.explore_tabs.length !== 1) {
       console.error(parsedResponse.explore_tabs.length);
@@ -60,15 +62,23 @@ function queryAirbnb(
     ) {
       return [];
     }
-    const locations = section.listings.map(x => ({
-      priceString: x.pricing_quote.price_string,
-      latitude: x.listing.lat,
-      longitude: x.listing.lng,
-      picture: x.listing.picture_url,
-      type: x.listing.room_and_property_type,
-      title: x.listing.name
+    const incompleteListings: Listing[] = (section.listings as any[]).map(
+      x => ({
+        priceString: x.pricing_quote.price_string,
+        latitude: x.listing.lat,
+        longitude: x.listing.lng,
+        picture: x.listing.picture_url,
+        type: x.listing.room_and_property_type,
+        title: x.listing.name,
+        amenityIds: x.listing.amenity_ids,
+        id: x.listing.id
+      })
+    );
+    const listings = await incompleteListings.map(async listing => ({
+      ...listing,
+      amenities: await getAmenities(listing)
     }));
-    return locations;
+    return listings;
   });
 }
 
