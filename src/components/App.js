@@ -78,7 +78,8 @@ class App extends Component {
       numGuests: 1,
       minPrice: 0,
       maxPrice: 1000,
-      roomType: "message"
+      roomType: "message",
+      amenities: []
     };
 
     this.youAreHereIcon = L.icon({
@@ -96,13 +97,18 @@ class App extends Component {
     this.map.fitBounds(latLngBounds);
   };
 
-  updateResults = locations => {
+  updateResults = listings => {
     this.markers.forEach(oldMarker => oldMarker.remove());
-    this.markers = locations.map(singleLocation =>
+    this.markers = listings.map(singleLocation =>
       L.marker([singleLocation.latitude, singleLocation.longitude]).addTo(
         this.map
       )
     );
+    this.setState({
+      amenities: _.uniq(
+        _.flatten(listings.map(listing => listing.amenities.map(x => x.name)))
+      )
+    });
   };
 
   updateMap = async event => {
@@ -286,6 +292,10 @@ class App extends Component {
                   </select>
                 </div>
                 <div className={styles.formContainer}>
+                  <FormInput
+                    placeholder="Which amenities do you require?"
+                    data={this.state.amenities}
+                  />
                   <FormInput
                     placeholder="What would you like to be near?"
                     data={this.state.nearData}
