@@ -74,10 +74,12 @@ function queryAirbnb(
         id: x.listing.id
       })
     );
-    const listings = await incompleteListings.map(async listing => ({
-      ...listing,
-      amenities: await getAmenities(listing)
-    }));
+    const listings = await Promise.all(
+      incompleteListings.map(async listing => ({
+        ...listing,
+        amenities: await getAmenities(listing)
+      }))
+    );
     return listings;
   });
 }
