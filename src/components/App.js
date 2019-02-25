@@ -144,18 +144,20 @@ class App extends Component {
   formatOSMData(OSMData) {
     const getOSMName = node =>
       node.properties["name:en"] || node.properties.name;
+    const notFalsy = x => x;
     return {
       restaurants: {
         "specific restaurants": OSMData.restaurants
           .map(getOSMName)
-          .filter(x => x),
+          .filter(notFalsy),
         cuisines: OSMData.restaurants.map(x =>
           _.startCase(x.properties.cuisine)
         )
       },
       "tourist attractions": OSMData.touristAttractions
         .map(getOSMName)
-        .filter(x => x)
+        .filter(notFalsy),
+      "leisure areas": OSMData.leisureAreas.map(getOSMName).filter(notFalsy)
     };
   }
 

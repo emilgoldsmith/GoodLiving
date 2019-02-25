@@ -30,8 +30,9 @@ export async function getAmenities(listing: Listing): Promise<Amenity[]> {
 
   try {
     res = await request(`https://www.airbnb.ae/rooms/${listing.id}`);
-  } catch {
+  } catch (e) {
     isFetching = false;
+    console.error(e);
     return [];
   }
   isFetching = false;

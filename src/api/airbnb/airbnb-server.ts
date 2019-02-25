@@ -4,19 +4,23 @@ import { Listing } from "./types";
 
 export function setupAirbnbRoute(router) {
   router.get("/query-airbnb", async (req, res) => {
-    const locations = await queryAirbnb(
-      req.query.swLat,
-      req.query.swLong,
-      req.query.neLat,
-      req.query.neLong,
-      req.query.maxPrice,
-      req.query.minPrice,
-      req.query.minDate,
-      req.query.maxDate,
-      req.query.guests,
-      req.query.roomType
-    );
-    res.json(locations);
+    try {
+      const locations = await queryAirbnb(
+        req.query.swLat,
+        req.query.swLong,
+        req.query.neLat,
+        req.query.neLong,
+        req.query.maxPrice,
+        req.query.minPrice,
+        req.query.minDate,
+        req.query.maxDate,
+        req.query.guests,
+        req.query.roomType
+      );
+      res.json(locations);
+    } catch {
+      res.sendStatus(500);
+    }
   });
 }
 
@@ -46,42 +50,47 @@ function queryAirbnb(
       guests,
       roomType
     )
-  }).then(async response => {
-    const parsedResponse = JSON.parse(response);
-    if (parsedResponse.explore_tabs.length !== 1) {
-      console.error(parsedResponse.explore_tabs.length);
-      throw new Error("More than one explore tab");
-    }
-    const section = parsedResponse.explore_tabs[0].sections.find(
-      x => x.section_type_uid === "PAGINATED_HOMES"
-    );
-    if (
-      !section &&
-      parsedResponse.explore_tabs[0].sections[0].messages[0].title ===
-        "No results"
-    ) {
-      return [];
-    }
-    const incompleteListings: Listing[] = (section.listings as any[]).map(
-      x => ({
-        priceString: x.pricing_quote.price_string,
-        latitude: x.listing.lat,
-        longitude: x.listing.lng,
-        picture: x.listing.picture_url,
-        type: x.listing.room_and_property_type,
-        title: x.listing.name,
-        amenityIds: x.listing.amenity_ids,
-        id: x.listing.id
-      })
-    );
-    const listings = await Promise.all(
-      incompleteListings.map(async listing => ({
-        ...listing,
-        amenities: await getAmenities(listing)
-      }))
-    );
-    return listings;
-  });
+  })
+    .then(async response => {
+      const parsedResponse = JSON.parse(response);
+      if (parsedResponse.explore_tabs.length !== 1) {
+        console.error(parsedResponse.explore_tabs.length);
+        throw new Error("More than one explore tab");
+      }
+      const section = parsedResponse.explore_tabs[0].sections.find(
+        x => x.section_type_uid === "PAGINATED_HOMES"
+      );
+      if (
+        !section &&
+        parsedResponse.explore_tabs[0].sections[0].messages[0].title ===
+          "No results"
+      ) {
+        return [];
+      }
+      const incompleteListings: Listing[] = (section.listings as any[]).map(
+        x => ({
+          priceString: x.pricing_quote.price_string,
+          latitude: x.listing.lat,
+          longitude: x.listing.lng,
+          picture: x.listing.picture_url,
+          type: x.listing.room_and_property_type,
+          title: x.listing.name,
+          amenityIds: x.listing.amenity_ids,
+          id: x.listing.id
+        })
+      );
+      const listings = await Promise.all(
+        incompleteListings.map(async listing => ({
+          ...listing,
+          amenities: await getAmenities(listing)
+        }))
+      );
+      return listings;
+    })
+    .catch(e => {
+      console.error(e);
+      throw new Error();
+    });
 }
 
 function getQueryString(

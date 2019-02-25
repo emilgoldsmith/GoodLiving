@@ -10,17 +10,22 @@ type Position = {
 type OSMData = {
   restaurants: any;
   touristAttractions: any;
+  leisureAreas: any;
 };
 
 export function setupOSMRoute(router) {
   router.get("/osm", async (req, res) => {
-    const OSMData = await getOSMDataWithinBoundary(
-      req.query.swLat,
-      req.query.swLong,
-      req.query.neLat,
-      req.query.neLong
-    );
-    res.json(OSMData);
+    try {
+      const OSMData = await getOSMDataWithinBoundary(
+        req.query.swLat,
+        req.query.swLong,
+        req.query.neLat,
+        req.query.neLong
+      );
+      res.json(OSMData);
+    } catch {
+      res.sendStatus(500);
+    }
   });
 }
 
@@ -31,7 +36,7 @@ async function getOSMDataWithinBoundary(
   neLong: string
 ): Promise<OSMData> {
   const pos: Position = { swLat, swLong, neLat, neLong };
-  const [restaurants, touristAttractions] = await Promise.all([
+  const [restaurants, touristAttractions, leisureAreas] = await Promise.all([
     makeOSMQuery(pos, [
       ["amenity", "restaurant"],
       ["amenity", "fast_food"],
@@ -51,9 +56,41 @@ async function getOSMDataWithinBoundary(
         "zoo",
         "yes"
       ].map(x => ["tourism", x] as [string, string])
+    ),
+    makeOSMQuery(
+      pos,
+      [
+        "adult_gaming_centre",
+        "amusement_arcade",
+        "beach_resort",
+        "bandstand",
+        "common",
+        "dance",
+        "disc_golf_course",
+        "dog_park",
+        "escape_game",
+        "fitness_centre",
+        "fitness_station",
+        "garden",
+        "horse_riding",
+        "ice_rink",
+        "miniature_golf",
+        "nature_reserve",
+        "park",
+        "picnic_table",
+        "pitch",
+        "playground",
+        "sports_centre",
+        "stadium",
+        "swimming_area",
+        "swimming_pool",
+        "track",
+        "water_park",
+        "wildlife_hide"
+      ].map(x => ["leisure", x] as [string, string])
     )
   ]);
-  return { restaurants, touristAttractions };
+  return { restaurants, touristAttractions, leisureAreas };
 }
 
 function makeOSMQuery(
@@ -72,8 +109,14 @@ function makeOSMQuery(
       `,
       (error, data) => {
         if (error) {
+          console.error(
+            "Overpass query failed with arguments",
+            pos,
+            keyValuePairs
+          );
           console.error(error);
           reject(error);
+          return;
         }
         resolve(data.features);
       },
