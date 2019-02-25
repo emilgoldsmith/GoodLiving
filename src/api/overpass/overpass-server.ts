@@ -1,17 +1,5 @@
 import queryOverpass from "query-overpass";
 
-export function setupOSMRoute(router) {
-  router.get("/osm", async (req, res) => {
-    const restaurantFeatures = await getOSMDataWithinBoundary(
-      req.query.swLat,
-      req.query.swLong,
-      req.query.neLat,
-      req.query.neLong
-    );
-    res.json(restaurantFeatures.features);
-  });
-}
-
 type Position = {
   swLat: string;
   swLong: string;
@@ -19,24 +7,59 @@ type Position = {
   neLong: string;
 };
 
-function getOSMDataWithinBoundary(
+type OSMData = {
+  restaurants: any;
+  touristAttractions: any;
+};
+
+export function setupOSMRoute(router) {
+  router.get("/osm", async (req, res) => {
+    const OSMData = await getOSMDataWithinBoundary(
+      req.query.swLat,
+      req.query.swLong,
+      req.query.neLat,
+      req.query.neLong
+    );
+    res.json(OSMData);
+  });
+}
+
+async function getOSMDataWithinBoundary(
   swLat: string,
   swLong: string,
   neLat: string,
   neLong: string
-): Promise<{ features: any }> {
+): Promise<OSMData> {
   const pos: Position = { swLat, swLong, neLat, neLong };
-  return makeOSMQuery(pos, [
-    ["amenity", "restaurant"],
-    ["amenity", "fast_food"],
-    ["amenity", "cafe"]
+  const [restaurants, touristAttractions] = await Promise.all([
+    makeOSMQuery(pos, [
+      ["amenity", "restaurant"],
+      ["amenity", "fast_food"],
+      ["amenity", "cafe"]
+    ]),
+    makeOSMQuery(
+      pos,
+      [
+        "aquarium",
+        "artwork",
+        "attraction",
+        "gallery",
+        "museum",
+        "picnic_site",
+        "theme_park",
+        "viewpoint",
+        "zoo",
+        "yes"
+      ].map(x => ["tourism", x] as [string, string])
+    )
   ]);
+  return { restaurants, touristAttractions };
 }
 
 function makeOSMQuery(
   pos: Position,
   keyValuePairs: [string, string][]
-): Promise<{ features: any }> {
+): Promise<any> {
   return new Promise((resolve, reject) => {
     queryOverpass(
       `
@@ -44,9 +67,6 @@ function makeOSMQuery(
           ${keyValuePairs
             .map(pair => buildOSMRequirement(pos, pair[0], pair[1]))
             .join("\n")}
-            ${buildOSMRequirement(pos, "amenity", "restaurant")}
-            ${buildOSMRequirement(pos, "amenity", "fast_food")}
-            ${buildOSMRequirement(pos, "amenity", "cafe")}
         );
         out body;
       `,
@@ -55,7 +75,7 @@ function makeOSMQuery(
           console.error(error);
           reject(error);
         }
-        resolve(data as { features: any });
+        resolve(data.features);
       },
       { flatProperties: true }
     );

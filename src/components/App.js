@@ -142,13 +142,20 @@ class App extends Component {
   };
 
   formatOSMData(OSMData) {
+    const getOSMName = node =>
+      node.properties["name:en"] || node.properties.name;
     return {
       restaurants: {
-        "specific restaurants": OSMData.map(
-          x => x.properties["name:en"] || x.properties.name
-        ).filter(x => x),
-        cuisines: OSMData.map(x => _.startCase(x.properties.cuisine))
-      }
+        "specific restaurants": OSMData.restaurants
+          .map(getOSMName)
+          .filter(x => x),
+        cuisines: OSMData.restaurants.map(x =>
+          _.startCase(x.properties.cuisine)
+        )
+      },
+      "tourist attractions": OSMData.touristAttractions
+        .map(getOSMName)
+        .filter(x => x)
     };
   }
 
