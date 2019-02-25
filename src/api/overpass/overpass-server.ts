@@ -12,19 +12,41 @@ export function setupOSMRoute(router) {
   });
 }
 
+type Position = {
+  swLat: string;
+  swLong: string;
+  neLat: string;
+  neLong: string;
+};
+
 function getOSMDataWithinBoundary(
-  swLat,
-  swLong,
-  neLat,
-  neLong
+  swLat: string,
+  swLong: string,
+  neLat: string,
+  neLong: string
+): Promise<{ features: any }> {
+  const pos: Position = { swLat, swLong, neLat, neLong };
+  return makeOSMQuery(pos, [
+    ["amenity", "restaurant"],
+    ["amenity", "fast_food"],
+    ["amenity", "cafe"]
+  ]);
+}
+
+function makeOSMQuery(
+  pos: Position,
+  keyValuePairs: [string, string][]
 ): Promise<{ features: any }> {
   return new Promise((resolve, reject) => {
     queryOverpass(
       `
         (
-            node(${swLat},${swLong},${neLat},${neLong})[amenity="restaurant"];
-            node(${swLat},${swLong},${neLat},${neLong})[amenity="fast_food"];
-            node(${swLat},${swLong},${neLat},${neLong})[amenity="cafe"];
+          ${keyValuePairs
+            .map(pair => buildOSMRequirement(pos, pair[0], pair[1]))
+            .join("\n")}
+            ${buildOSMRequirement(pos, "amenity", "restaurant")}
+            ${buildOSMRequirement(pos, "amenity", "fast_food")}
+            ${buildOSMRequirement(pos, "amenity", "cafe")}
         );
         out body;
       `,
@@ -38,4 +60,12 @@ function getOSMDataWithinBoundary(
       { flatProperties: true }
     );
   });
+}
+
+function buildOSMRequirement(
+  { swLat, swLong, neLat, neLong }: Position,
+  key: string,
+  value: string
+) {
+  return `node(${swLat},${swLong},${neLat},${neLong})[${key}="${value}"];`;
 }
