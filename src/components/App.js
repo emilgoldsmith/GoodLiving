@@ -10,6 +10,7 @@ import moment from "moment";
 import * as NumericInput from "react-numeric-input";
 import { Range } from "rc-slider";
 import * as _ from "lodash";
+import { debounce } from "throttle-debounce";
 import "rc-slider/assets/index.css";
 // Overwriting default styles of NumericInput
 NumericInput.style.input = {};
@@ -111,7 +112,7 @@ class App extends Component {
     });
   };
 
-  updateMap = async event => {
+  updateMap = debounce(750, async event => {
     const bounds = this.map.getBounds();
     const { lng: swLong, lat: swLat } = bounds.getSouthWest();
     const { lng: neLong, lat: neLat } = bounds.getNorthEast();
@@ -139,7 +140,7 @@ class App extends Component {
       results: results.slice(0, 10),
       nearData: this.formatOSMData(OSMData)
     });
-  };
+  });
 
   formatOSMData(OSMData) {
     const getOSMName = node =>
