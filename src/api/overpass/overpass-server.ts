@@ -120,7 +120,10 @@ function makeOSMQuery(
         }
         resolve(data.features);
       },
-      { flatProperties: true }
+      {
+        flatProperties: true,
+        overpassUrl: "https://overpass.kumi.systems/api/interpreter"
+      }
     );
   });
 }
