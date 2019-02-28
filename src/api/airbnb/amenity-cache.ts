@@ -1,5 +1,6 @@
 import request from "request-promise-native";
 import { Listing, Amenity } from "./types";
+import * as _ from "lodash";
 
 let isFetching = false;
 
@@ -61,6 +62,8 @@ export async function getAmenities(listing: Listing): Promise<Amenity[]> {
   );
   return [];
 }
+
+export const amenityNameToId = (name: Amenity["name"]) => cacheReverseMap[name];
 
 const ignoredIds = [
   3,
@@ -432,3 +435,8 @@ const cache: { [key: number]: Amenity } = {
     id: 293
   }
 };
+
+const cacheReverseMap: { [key: string]: number } = {};
+_.forEach(cache, value => {
+  cacheReverseMap[value.name] = value.id;
+});

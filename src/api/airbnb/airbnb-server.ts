@@ -15,7 +15,8 @@ export function setupAirbnbRoute(router) {
         req.query.minDate,
         req.query.maxDate,
         req.query.guests,
-        req.query.roomType
+        req.query.roomType,
+        req.query.requiredAmenities
       );
       res.json(locations);
     } catch {
@@ -25,16 +26,17 @@ export function setupAirbnbRoute(router) {
 }
 
 function queryAirbnb(
-  swLat,
-  swLong,
-  neLat,
-  neLong,
-  maxPrice,
-  minPrice,
-  minDate,
-  maxDate,
-  guests,
-  roomType
+  swLat: string,
+  swLong: string,
+  neLat: string,
+  neLong: string,
+  maxPrice: string,
+  minPrice: string,
+  minDate: string,
+  maxDate: string,
+  guests: string,
+  roomType: string,
+  requiredAmenities: string[]
 ) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
@@ -48,8 +50,10 @@ function queryAirbnb(
       minDate,
       maxDate,
       guests,
-      roomType
-    )
+      roomType,
+      requiredAmenities
+    ),
+    qsStringifyOptions: { arrayFormat: "brackets" }
   })
     .then(async response => {
       const parsedResponse = JSON.parse(response);
@@ -85,6 +89,19 @@ function queryAirbnb(
           amenities: await getAmenities(listing)
         }))
       );
+      // Sanity check
+      const listingsViolateAmenityFilter = listings.some(listing => {
+        const listingViolates = requiredAmenities.some(requiredId => {
+          return (
+            listing.amenities.find(x => x.id.toString() === requiredId) ===
+            undefined
+          );
+        });
+        return listingViolates;
+      });
+      if (listingsViolateAmenityFilter) {
+        console.error("We have a violation of the amenity filter");
+      }
       return listings;
     })
     .catch(e => {
@@ -94,16 +111,17 @@ function queryAirbnb(
 }
 
 function getQueryString(
-  swLat,
-  swLong,
-  neLat,
-  neLong,
-  maxPrice,
-  minPrice,
-  minDate,
-  maxDate,
-  guests,
-  roomType
+  swLat: string,
+  swLong: string,
+  neLat: string,
+  neLong: string,
+  maxPrice: string,
+  minPrice: string,
+  minDate: string,
+  maxDate: string,
+  guests: string,
+  roomType: string,
+  requiredAmenities: string[]
 ) {
   return {
     sw_lat: swLat.toString(),
@@ -115,6 +133,7 @@ function getQueryString(
     checkin: minDate,
     checkout: maxDate,
     adults: guests.toString(),
+    ...(requiredAmenities ? { amenities: requiredAmenities } : {}),
     // Don't set key if nothing is chosen
     ...(roomType ? { "room_types[]": roomType } : {}),
     // These could possibly be interesting to look at later
