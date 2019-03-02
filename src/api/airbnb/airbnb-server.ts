@@ -1,6 +1,6 @@
 import request from "request-promise-native";
 import { getAmenities } from "./amenity-cache";
-import { Listing } from "./types";
+import { Listing, NearbyFilter } from "./types";
 
 export function setupAirbnbRoute(router) {
   router.get("/query-airbnb", async (req, res) => {
@@ -16,7 +16,8 @@ export function setupAirbnbRoute(router) {
         req.query.maxDate,
         req.query.guests,
         req.query.roomType,
-        req.query.requiredAmenities
+        req.query.requiredAmenities,
+        req.query.nearbyFilters
       );
       res.json(locations);
     } catch {
@@ -36,7 +37,8 @@ function queryAirbnb(
   maxDate: string,
   guests: string,
   roomType: string,
-  requiredAmenities: string[]
+  requiredAmenities: string[],
+  nearbyFilters: NearbyFilter
 ) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
@@ -51,7 +53,8 @@ function queryAirbnb(
       maxDate,
       guests,
       roomType,
-      requiredAmenities
+      requiredAmenities,
+      nearbyFilters
     ),
     qsStringifyOptions: { arrayFormat: "brackets" }
   })
@@ -91,7 +94,7 @@ function queryAirbnb(
       );
       // Sanity check
       const listingsViolateAmenityFilter = listings.some(listing => {
-        const listingViolates = requiredAmenities.some(requiredId => {
+        const listingViolates = (requiredAmenities || []).some(requiredId => {
           return (
             listing.amenities.find(x => x.id.toString() === requiredId) ===
             undefined
@@ -121,7 +124,8 @@ function getQueryString(
   maxDate: string,
   guests: string,
   roomType: string,
-  requiredAmenities: string[]
+  requiredAmenities: string[],
+  nearbyFilters: NearbyFilter
 ) {
   return {
     sw_lat: swLat.toString(),
@@ -136,10 +140,9 @@ function getQueryString(
     ...(requiredAmenities ? { amenities: requiredAmenities } : {}),
     // Don't set key if nothing is chosen
     ...(roomType ? { "room_types[]": roomType } : {}),
+    items_per_grid: "40",
+    items_offset: "0",
     // These could possibly be interesting to look at later
-    experiences_per_grid: "20",
-    items_per_grid: "18",
-    guidebooks_per_grid: "20",
     currency: "USD",
     locale: "en",
     // Everything below here we just keep because it makes things work, and it's what the browser requested

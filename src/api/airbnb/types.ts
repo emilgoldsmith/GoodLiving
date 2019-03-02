@@ -14,3 +14,7 @@ export type Amenity = {
   name: string;
   id: number;
 };
+
+export type NearbyFilter = {
+  name: string;
+};
