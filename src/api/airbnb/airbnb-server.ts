@@ -2,7 +2,7 @@ import request from "request-promise-native";
 import { getAmenities } from "./amenity-cache";
 import { Listing, NearbyFilter } from "./types";
 
-type AirbnbParams = {
+export type AirbnbParams = {
   swLat: string;
   swLong: string;
   neLat: string;
@@ -28,7 +28,7 @@ export function setupAirbnbRoute(router) {
   });
 }
 
-function queryAirbnb(params: AirbnbParams) {
+export function queryAirbnb(params: AirbnbParams) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
     qs: getQueryString(params),

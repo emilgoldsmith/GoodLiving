@@ -1,6 +1,6 @@
 import queryOverpass from "query-overpass";
 
-type Position = {
+export type Position = {
   swLat: string;
   swLong: string;
   neLat: string;
@@ -24,7 +24,9 @@ export function setupOSMRoute(router) {
   });
 }
 
-async function getOSMDataWithinBoundary(pos: Position): Promise<OSMData> {
+export async function getOSMDataWithinBoundary(
+  pos: Position
+): Promise<OSMData> {
   const [restaurants, touristAttractions, leisureAreas] = await Promise.all([
     makeOSMQuery(pos, [
       ["amenity", "restaurant"],
