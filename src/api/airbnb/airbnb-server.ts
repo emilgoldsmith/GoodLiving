@@ -2,23 +2,25 @@ import request from "request-promise-native";
 import { getAmenities } from "./amenity-cache";
 import { Listing, NearbyFilter } from "./types";
 
+type AirbnbParams = {
+  swLat: string;
+  swLong: string;
+  neLat: string;
+  neLong: string;
+  maxPrice: string;
+  minPrice: string;
+  minDate: string;
+  maxDate: string;
+  guests: string;
+  roomType: string;
+  requiredAmenities: string[];
+  nearbyFilters: NearbyFilter;
+};
+
 export function setupAirbnbRoute(router) {
   router.get("/query-airbnb", async (req, res) => {
     try {
-      const locations = await queryAirbnb(
-        req.query.swLat,
-        req.query.swLong,
-        req.query.neLat,
-        req.query.neLong,
-        req.query.maxPrice,
-        req.query.minPrice,
-        req.query.minDate,
-        req.query.maxDate,
-        req.query.guests,
-        req.query.roomType,
-        req.query.requiredAmenities,
-        req.query.nearbyFilters
-      );
+      const locations = await queryAirbnb(req.query);
       res.json(locations);
     } catch {
       res.sendStatus(500);
@@ -26,36 +28,10 @@ export function setupAirbnbRoute(router) {
   });
 }
 
-function queryAirbnb(
-  swLat: string,
-  swLong: string,
-  neLat: string,
-  neLong: string,
-  maxPrice: string,
-  minPrice: string,
-  minDate: string,
-  maxDate: string,
-  guests: string,
-  roomType: string,
-  requiredAmenities: string[],
-  nearbyFilters: NearbyFilter
-) {
+function queryAirbnb(params: AirbnbParams) {
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
-    qs: getQueryString(
-      swLat,
-      swLong,
-      neLat,
-      neLong,
-      maxPrice,
-      minPrice,
-      minDate,
-      maxDate,
-      guests,
-      roomType,
-      requiredAmenities,
-      nearbyFilters
-    ),
+    qs: getQueryString(params),
     qsStringifyOptions: { arrayFormat: "brackets" }
   })
     .then(async response => {
@@ -94,12 +70,14 @@ function queryAirbnb(
       );
       // Sanity check
       const listingsViolateAmenityFilter = listings.some(listing => {
-        const listingViolates = (requiredAmenities || []).some(requiredId => {
-          return (
-            listing.amenities.find(x => x.id.toString() === requiredId) ===
-            undefined
-          );
-        });
+        const listingViolates = (params.requiredAmenities || []).some(
+          requiredId => {
+            return (
+              listing.amenities.find(x => x.id.toString() === requiredId) ===
+              undefined
+            );
+          }
+        );
         return listingViolates;
       });
       if (listingsViolateAmenityFilter) {
@@ -113,20 +91,20 @@ function queryAirbnb(
     });
 }
 
-function getQueryString(
-  swLat: string,
-  swLong: string,
-  neLat: string,
-  neLong: string,
-  maxPrice: string,
-  minPrice: string,
-  minDate: string,
-  maxDate: string,
-  guests: string,
-  roomType: string,
-  requiredAmenities: string[],
-  nearbyFilters: NearbyFilter
-) {
+function getQueryString({
+  swLat,
+  swLong,
+  neLat,
+  neLong,
+  maxPrice,
+  minPrice,
+  minDate,
+  maxDate,
+  guests,
+  roomType,
+  requiredAmenities,
+  nearbyFilters
+}: AirbnbParams) {
   return {
     sw_lat: swLat.toString(),
     sw_lng: swLong.toString(),

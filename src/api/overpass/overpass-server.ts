@@ -16,12 +16,7 @@ type OSMData = {
 export function setupOSMRoute(router) {
   router.get("/osm", async (req, res) => {
     try {
-      const OSMData = await getOSMDataWithinBoundary(
-        req.query.swLat,
-        req.query.swLong,
-        req.query.neLat,
-        req.query.neLong
-      );
+      const OSMData = await getOSMDataWithinBoundary(req.query);
       res.json(OSMData);
     } catch {
       res.sendStatus(500);
@@ -29,13 +24,7 @@ export function setupOSMRoute(router) {
   });
 }
 
-async function getOSMDataWithinBoundary(
-  swLat: string,
-  swLong: string,
-  neLat: string,
-  neLong: string
-): Promise<OSMData> {
-  const pos: Position = { swLat, swLong, neLat, neLong };
+async function getOSMDataWithinBoundary(pos: Position): Promise<OSMData> {
   const [restaurants, touristAttractions, leisureAreas] = await Promise.all([
     makeOSMQuery(pos, [
       ["amenity", "restaurant"],
