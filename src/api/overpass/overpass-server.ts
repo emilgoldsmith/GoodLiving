@@ -7,10 +7,17 @@ export type Position = {
   neLong: string;
 };
 
+type OSMNode = {
+  properties: any;
+  geometry: {
+    coordinates: [number, number];
+  };
+};
+
 type OSMData = {
-  restaurants: any;
-  touristAttractions: any;
-  leisureAreas: any;
+  restaurants: OSMNode[];
+  touristAttractions: OSMNode[];
+  leisureAreas: OSMNode[];
 };
 
 export function setupOSMRoute(router) {

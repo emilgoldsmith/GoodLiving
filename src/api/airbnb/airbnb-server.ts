@@ -15,6 +15,8 @@ export type AirbnbParams = {
   roomType: string;
   requiredAmenities: string[];
   nearbyFilters: NearbyFilter;
+  items?: number;
+  itemOffset?: number;
 };
 
 export function setupAirbnbRoute(router) {
@@ -103,7 +105,9 @@ function getQueryString({
   guests,
   roomType,
   requiredAmenities,
-  nearbyFilters
+  nearbyFilters,
+  items = 40,
+  itemOffset = 0
 }: AirbnbParams) {
   return {
     sw_lat: swLat.toString(),
@@ -118,8 +122,8 @@ function getQueryString({
     ...(requiredAmenities ? { amenities: requiredAmenities } : {}),
     // Don't set key if nothing is chosen
     ...(roomType ? { "room_types[]": roomType } : {}),
-    items_per_grid: "40",
-    items_offset: "0",
+    items_per_grid: items.toString(),
+    items_offset: itemOffset.toString(),
     // These could possibly be interesting to look at later
     currency: "USD",
     locale: "en",
