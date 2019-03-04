@@ -2,7 +2,9 @@ import express from "express";
 import { setupAirbnbRoute } from "./airbnb/airbnb-server";
 import { setupGeocodeRoute } from "./geocode/geocode-server";
 import { setupOSMRoute } from "./overpass/overpass-server";
+import { setupGeneralApiRoute } from "./general-api-server";
 import * as dotenv from "dotenv";
+import * as bodyParser from "body-parser";
 
 dotenv.config();
 
@@ -14,8 +16,10 @@ const apiRouter = express.Router();
 setupAirbnbRoute(apiRouter);
 setupGeocodeRoute(apiRouter);
 setupOSMRoute(apiRouter);
+setupGeneralApiRoute(apiRouter);
 
 app.use(express.static("build"));
+app.use(bodyParser.json());
 
 app.use("/api", apiRouter);
 

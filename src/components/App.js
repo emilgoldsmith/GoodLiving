@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styles from "./App.module.scss";
-import { queryAirbnb } from "../api/airbnb/airbnb-client";
-import { getOSMDataWithinBoundary } from "../api/overpass/overpass-client";
+import { queryGeneralData } from "../api/general-api-client";
 import MainInput from "./MainInput";
 import FormInput from "./FormInput";
 import DatePicker from "react-datepicker";
@@ -116,25 +115,22 @@ class App extends Component {
     const bounds = this.map.getBounds();
     const { lng: swLong, lat: swLat } = bounds.getSouthWest();
     const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-    const [results, OSMData] = await Promise.all([
-      queryAirbnb(
-        swLat,
-        swLong,
-        neLat,
-        neLong,
-        this.state.minPrice,
-        this.state.maxPrice,
-        moment(this.state.minDate).isValid()
-          ? moment(this.state.minDate).format("YYYY-MM-DD")
-          : "",
-        moment(this.state.maxDate).isValid()
-          ? moment(this.state.maxDate).format("YYYY-MM-DD")
-          : "",
-        this.state.numGuests,
-        this.state.roomType === "message" ? "" : this.state.roomType
-      ),
-      getOSMDataWithinBoundary(swLat, swLong, neLat, neLong)
-    ]);
+    const { airbnbResults: results, OSMData } = await queryGeneralData(
+      swLat,
+      swLong,
+      neLat,
+      neLong,
+      this.state.minPrice,
+      this.state.maxPrice,
+      moment(this.state.minDate).isValid()
+        ? moment(this.state.minDate).format("YYYY-MM-DD")
+        : "",
+      moment(this.state.maxDate).isValid()
+        ? moment(this.state.maxDate).format("YYYY-MM-DD")
+        : "",
+      this.state.numGuests,
+      this.state.roomType === "message" ? "" : this.state.roomType
+    );
     this.updateResults(results);
     this.setState({
       results: results.slice(0, 10),

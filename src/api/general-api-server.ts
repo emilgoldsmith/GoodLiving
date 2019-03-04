@@ -2,6 +2,7 @@ import { AirbnbParams, queryAirbnb } from "./airbnb/airbnb-server";
 import { Position, getOSMDataWithinBoundary } from "./overpass/overpass-server";
 import { getDistance } from "geolib";
 import * as _ from "lodash";
+import { Router } from "express";
 
 type LocationFilter = {
   nodeKey: string;
@@ -12,17 +13,27 @@ type LocationFilter = {
 
 type QueryObject = {
   airbnb: AirbnbParams;
-  overpass: Position;
   locationFilters: LocationFilter[];
 };
+
+export function setupGeneralApiRoute(router: Router) {
+  router.post("/general", async (req, res) => {
+    try {
+      const generalData = await getAppData(req.body);
+      res.json(generalData);
+    } catch {
+      res.sendStatus(500);
+    }
+  });
+}
 
 async function getAppData(query: QueryObject) {
   const numAirbnbResults = 1000;
   const [airbnbResults, OSMResults] = await Promise.all([
     queryAirbnb({ ...query.airbnb, items: numAirbnbResults }),
-    getOSMDataWithinBoundary(query.overpass)
+    getOSMDataWithinBoundary(query.airbnb)
   ]);
-  airbnbResults.filter(result =>
+  const filteredAirbnbResults = airbnbResults.filter(result =>
     query.locationFilters.every(filter =>
       _.some(OSMResults, value =>
         value.some(node => {
@@ -50,4 +61,5 @@ async function getAppData(query: QueryObject) {
       )
     )
   );
+  return { airbnbResults: filteredAirbnbResults, OSMData: OSMResults };
 }
