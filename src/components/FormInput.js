@@ -59,21 +59,24 @@ export default class FormInput extends Component {
       getStringValue(val).toLowerCase()
     )
       .sort((a, b) => {
-        a = getStringValue(a);
-        b = getStringValue(b);
+        a = getStringValue(a).toLowerCase();
+        b = getStringValue(b).toLowerCase();
         if (a < b) return -1;
         if (a > b) return 1;
         return 0;
       })
       .filter(
         x =>
-          getStringValue(x).startsWith(this.state.inputValue.toLowerCase()) &&
-          getStringValue(x) !== this.state.inputValue.toLowerCase()
+          getStringValue(x)
+            .toLowerCase()
+            .startsWith(this.state.inputValue.toLowerCase()) &&
+          getStringValue(x).toLowerCase() !==
+            this.state.inputValue.toLowerCase()
       )
       .map(x => (
         <div
           className={styles.suggestion}
-          key={getStringValue(x)}
+          key={getStringValue(x).toLowerCase()}
           onClick={this.handleSuggestionClick.bind(
             this,
             getStringValue(x),
