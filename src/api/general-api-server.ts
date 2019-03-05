@@ -5,8 +5,7 @@ import * as _ from "lodash";
 import { Router } from "express";
 
 type LocationFilter = {
-  nodeKey: string;
-  nodeValue?: string;
+  keyValuePairs: ([string] | [string, string])[];
   minDist: number;
   maxDist: number;
 };
@@ -36,28 +35,30 @@ async function getAppData(query: QueryObject) {
   const filteredAirbnbResults = airbnbResults.filter(result =>
     query.locationFilters.every(filter =>
       _.some(OSMResults, value =>
-        value.some(node => {
-          if (
-            Object.prototype.hasOwnProperty.call(
-              node.properties,
-              filter.nodeKey
-            ) &&
-            (filter.nodeValue === undefined ||
-              node.properties[filter.nodeKey] === filter.nodeValue)
-          ) {
-            const dist = getDistance(
-              {
-                latitude: node.geometry[0],
-                longitude: node.geometry[1]
-              },
-              {
-                latitude: Number(result.latitude),
-                longitude: Number(result.longitude)
-              }
-            );
-            return dist > filter.minDist && dist < filter.maxDist;
-          }
-        })
+        value.some(node =>
+          filter.keyValuePairs.some(keyValue => {
+            if (
+              Object.prototype.hasOwnProperty.call(
+                node.properties,
+                keyValue[0]
+              ) &&
+              (keyValue.length === 1 ||
+                node.properties[keyValue[0]] === keyValue[1])
+            ) {
+              const dist = getDistance(
+                {
+                  latitude: node.geometry[0],
+                  longitude: node.geometry[1]
+                },
+                {
+                  latitude: Number(result.latitude),
+                  longitude: Number(result.longitude)
+                }
+              );
+              return dist > filter.minDist && dist < filter.maxDist;
+            }
+          })
+        )
       )
     )
   );
