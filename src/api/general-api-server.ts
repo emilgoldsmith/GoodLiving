@@ -21,7 +21,8 @@ export function setupGeneralApiRoute(router: Router) {
     try {
       const generalData = await getAppData(req.body);
       res.json(generalData);
-    } catch {
+    } catch (e) {
+      console.error(e);
       res.sendStatus(500);
     }
   });
@@ -39,7 +40,8 @@ async function getAppData(query: QueryObject) {
         value.some(node =>
           (filter.requireAllPairs
             ? filter.keyValuePairs.every
-            : filter.keyValuePairs.some)(keyValue => {
+            : filter.keyValuePairs.some
+          ).call(filter.keyValuePairs, keyValue => {
             if (
               Object.prototype.hasOwnProperty.call(
                 node.properties,
@@ -50,8 +52,8 @@ async function getAppData(query: QueryObject) {
             ) {
               const dist = getDistance(
                 {
-                  latitude: node.geometry[0],
-                  longitude: node.geometry[1]
+                  latitude: node.geometry.coordinates[1],
+                  longitude: node.geometry.coordinates[0]
                 },
                 {
                   latitude: Number(result.latitude),

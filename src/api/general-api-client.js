@@ -34,5 +34,9 @@ export async function queryGeneralData(
       "Content-Type": "application/json"
     }
   });
-  return res.json();
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error(res.statusText);
+  }
 }
