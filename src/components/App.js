@@ -79,7 +79,9 @@ class App extends Component {
       minPrice: 0,
       maxPrice: 1000,
       roomType: "message",
-      amenities: []
+      amenities: [],
+      nearbyFilters: [],
+      amenityFilters: []
     };
 
     this.youAreHereIcon = L.icon({
@@ -151,7 +153,7 @@ class App extends Component {
       };
     };
     const nodeToKeyValuePairs = node =>
-      _.map(node.properties, (value, key) => [value, key]);
+      _.map(node.properties, (value, key) => [key, value]);
     const nodeToSpecificPlace = node =>
       addMetaDataToString(getOSMName(node), {
         keyValuePairs: nodeToKeyValuePairs(node)
@@ -250,6 +252,19 @@ class App extends Component {
   handleRoomTypeChanged = event =>
     this.setState({ roomType: event.target.value }, this.updateMap);
 
+  addAmenityFilter = val =>
+    this.setState(state => ({
+      amenityFilters: state.amenityFilters.concat([val])
+    }));
+
+  addNearbyFilter = (val, meta) => {
+    this.setState(state => ({
+      nearbyFilters: state.nearbyFilters.concat([
+        { keyValuePairs: meta.keyValuePairs, minDist: 0, maxDist: 1000 }
+      ])
+    }));
+  };
+
   render() {
     let x = 0;
     return (
@@ -332,10 +347,12 @@ class App extends Component {
                   <FormInput
                     placeholder="Which amenities do you require?"
                     data={this.state.amenities}
+                    addFilter={this.addAmenityFilter}
                   />
                   <FormInput
                     placeholder="What would you like to be near?"
                     data={this.state.nearData}
+                    addFilter={this.addNearbyFilter}
                   />
                 </div>
               </div>

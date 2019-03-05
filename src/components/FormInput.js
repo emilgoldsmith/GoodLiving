@@ -17,11 +17,12 @@ export default class FormInput extends Component {
       ? _.get(this.props.data, this.state.suggestionPath)
       : this.props.data;
 
-  handleSuggestionClick = (val, meta, event) => {
+  handleSuggestionClick = (val, meta) => {
     const suggestionLevel = this.getSuggestionLevel();
     if (suggestionLevel instanceof Array) {
+      this.props.addFilter(val, meta);
       this.setState({
-        inputValue: event.target.innerText,
+        inputValue: "",
         displaySuggestions: false
       });
     } else {
