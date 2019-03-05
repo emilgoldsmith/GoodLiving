@@ -268,7 +268,12 @@ class App extends Component {
     this.setState(
       state => ({
         nearbyFilters: state.nearbyFilters.concat([
-          { keyValuePairs: meta.keyValuePairs, minDist: 0, maxDist: 1000 }
+          {
+            keyValuePairs: meta.keyValuePairs,
+            requireAllPairs: meta.requireAllPairs,
+            minDist: 0,
+            maxDist: 1000
+          }
         ])
       }),
       this.updateMap
