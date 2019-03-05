@@ -18,6 +18,7 @@ type OSMData = {
   restaurants: OSMNode[];
   touristAttractions: OSMNode[];
   leisureAreas: OSMNode[];
+  publicTransport: OSMNode[];
 };
 
 export function setupOSMRoute(router) {
@@ -34,7 +35,12 @@ export function setupOSMRoute(router) {
 export async function getOSMDataWithinBoundary(
   pos: Position
 ): Promise<OSMData> {
-  const [restaurants, touristAttractions, leisureAreas] = await Promise.all([
+  const [
+    restaurants,
+    touristAttractions,
+    leisureAreas,
+    publicTransport
+  ] = await Promise.all([
     makeOSMQuery(pos, [
       ["amenity", "restaurant"],
       ["amenity", "fast_food"],
@@ -86,9 +92,15 @@ export async function getOSMDataWithinBoundary(
         "water_park",
         "wildlife_hide"
       ].map(x => ["leisure", x] as [string, string])
-    )
+    ),
+    makeOSMQuery(pos, [
+      ["public_transport", "stop_position"],
+      ["public_transport", "platform"],
+      ["public_transport", "station"],
+      ["highway", "bus_stop"]
+    ])
   ]);
-  return { restaurants, touristAttractions, leisureAreas };
+  return { restaurants, touristAttractions, leisureAreas, publicTransport };
 }
 
 function makeOSMQuery(
