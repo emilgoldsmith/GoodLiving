@@ -156,7 +156,8 @@ class App extends Component {
       _.map(node.properties, (value, key) => [key, value]);
     const nodeToSpecificPlace = node =>
       addMetaDataToString(getOSMName(node), {
-        keyValuePairs: nodeToKeyValuePairs(node)
+        keyValuePairs: nodeToKeyValuePairs(node),
+        requireAllPairs: true
       });
 
     return {
@@ -168,7 +169,8 @@ class App extends Component {
           .filter(x => x.properties.cuisine)
           .map(x =>
             addMetaDataToString(x.properties.cuisine, {
-              keyValuePairs: [["cuisine", x.properties.cuisine]]
+              keyValuePairs: [["cuisine", x.properties.cuisine]],
+              requireAllPairs: true
             })
           )
       },

@@ -8,6 +8,7 @@ type LocationFilter = {
   keyValuePairs: ([string] | [string, string])[];
   minDist: number;
   maxDist: number;
+  requireAllPairs: boolean;
 };
 
 type QueryObject = {
@@ -36,7 +37,9 @@ async function getAppData(query: QueryObject) {
     query.locationFilters.every(filter =>
       _.some(OSMResults, value =>
         value.some(node =>
-          filter.keyValuePairs.some(keyValue => {
+          (filter.requireAllPairs
+            ? filter.keyValuePairs.every
+            : filter.keyValuePairs.some)(keyValue => {
             if (
               Object.prototype.hasOwnProperty.call(
                 node.properties,
