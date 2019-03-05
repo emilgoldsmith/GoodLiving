@@ -63,7 +63,13 @@ export async function getAmenities(listing: Listing): Promise<Amenity[]> {
   return [];
 }
 
-export const amenityNameToId = (name: Amenity["name"]) => cacheReverseMap[name];
+export const amenityNameToId = (name: Amenity["name"]) => {
+  const id = cacheReverseMap[name];
+  if (id == null) {
+    throw new Error(`Encountered unrecognized amenity ${name}`);
+  }
+  return id;
+};
 
 const ignoredIds = [
   3,

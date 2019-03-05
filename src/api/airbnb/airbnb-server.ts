@@ -1,5 +1,5 @@
 import request from "request-promise-native";
-import { getAmenities } from "./amenity-cache";
+import { getAmenities, amenityNameToId } from "./amenity-cache";
 import { Listing, NearbyFilter } from "./types";
 
 export type AirbnbParams = {
@@ -31,6 +31,9 @@ export function setupAirbnbRoute(router) {
 }
 
 export function queryAirbnb(params: AirbnbParams) {
+  params.requiredAmenities = params.requiredAmenities
+    .map(amenityNameToId)
+    .map(x => x.toString());
   return request({
     uri: "https://www.airbnb.ae/api/v2/explore_tabs",
     qs: getQueryString(params),

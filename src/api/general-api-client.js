@@ -9,7 +9,8 @@ export async function queryGeneralData(
   maxDate,
   guests,
   roomType,
-  locationFilters = []
+  amenityFilters,
+  nearbyFilters
 ) {
   const res = await fetch("/api/general", {
     method: "POST",
@@ -24,9 +25,10 @@ export async function queryGeneralData(
         minDate,
         maxDate,
         guests,
-        roomType
+        roomType,
+        requiredAmenities: amenityFilters
       },
-      locationFilters
+      locationFilters: nearbyFilters
     }),
     headers: {
       "Content-Type": "application/json"

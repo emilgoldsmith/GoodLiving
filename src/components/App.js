@@ -131,7 +131,9 @@ class App extends Component {
         ? moment(this.state.maxDate).format("YYYY-MM-DD")
         : "",
       this.state.numGuests,
-      this.state.roomType === "message" ? "" : this.state.roomType
+      this.state.roomType === "message" ? "" : this.state.roomType,
+      this.state.amenityFilters,
+      this.state.nearbyFilters
     );
     this.updateResults(results);
     this.setState({
@@ -255,16 +257,22 @@ class App extends Component {
     this.setState({ roomType: event.target.value }, this.updateMap);
 
   addAmenityFilter = val =>
-    this.setState(state => ({
-      amenityFilters: state.amenityFilters.concat([val])
-    }));
+    this.setState(
+      state => ({
+        amenityFilters: state.amenityFilters.concat([val])
+      }),
+      this.updateMap
+    );
 
   addNearbyFilter = (val, meta) => {
-    this.setState(state => ({
-      nearbyFilters: state.nearbyFilters.concat([
-        { keyValuePairs: meta.keyValuePairs, minDist: 0, maxDist: 1000 }
-      ])
-    }));
+    this.setState(
+      state => ({
+        nearbyFilters: state.nearbyFilters.concat([
+          { keyValuePairs: meta.keyValuePairs, minDist: 0, maxDist: 1000 }
+        ])
+      }),
+      this.updateMap
+    );
   };
 
   render() {
