@@ -17,19 +17,16 @@ export default class FormInput extends Component {
       ? _.get(this.props.data, this.state.suggestionPath)
       : this.props.data;
 
-  handleSuggestionClick = e => {
+  handleSuggestionClick = (val, meta, event) => {
     const suggestionLevel = this.getSuggestionLevel();
     if (suggestionLevel instanceof Array) {
       this.setState({
-        inputValue: e.target.innerText,
+        inputValue: event.target.innerText,
         displaySuggestions: false
       });
     } else {
-      e.persist();
       this.setState(state => ({
-        suggestionPath: state.suggestionPath.concat([
-          e.target.innerText.toLowerCase()
-        ]),
+        suggestionPath: state.suggestionPath.concat([val.toLowerCase()]),
         inputValue: ""
       }));
     }
@@ -55,20 +52,34 @@ export default class FormInput extends Component {
         ? _.values(suggestionLevel)
         : _.keys(suggestionLevel);
 
-    const suggestions = _.uniq(suggestionData.map(x => x.toLowerCase()))
-      .sort()
+    const getStringValue = val => (val._meta ? val.value : val);
+
+    const suggestions = _.uniqBy(suggestionData, val =>
+      getStringValue(val).toLowerCase()
+    )
+      .sort((a, b) => {
+        a = getStringValue(a);
+        b = getStringValue(b);
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+      })
       .filter(
         x =>
-          x.startsWith(this.state.inputValue.toLowerCase()) &&
-          x !== this.state.inputValue.toLowerCase()
+          getStringValue(x).startsWith(this.state.inputValue.toLowerCase()) &&
+          getStringValue(x) !== this.state.inputValue.toLowerCase()
       )
       .map(x => (
         <div
           className={styles.suggestion}
-          key={x}
-          onClick={this.handleSuggestionClick}
+          key={getStringValue(x)}
+          onClick={this.handleSuggestionClick.bind(
+            this,
+            getStringValue(x),
+            x._meta
+          )}
         >
-          {_.startCase(x)}
+          {_.startCase(getStringValue(x))}
         </div>
       ));
 

@@ -142,19 +142,50 @@ class App extends Component {
     const getOSMName = node =>
       node.properties["name:en"] || node.properties.name;
     const notFalsy = x => x;
+    const addMetaDataToString = (string, metaData) => {
+      // It's falsy
+      if (!string) return string;
+      return {
+        value: string,
+        _meta: metaData
+      };
+    };
+    const nodeToKeyValuePairs = node =>
+      _.map(node.properties, (value, key) => [value, key]);
+    const nodeToSpecificPlace = node =>
+      addMetaDataToString(getOSMName(node), {
+        keyValuePairs: nodeToKeyValuePairs(node)
+      });
+
     return {
       restaurants: {
         "specific restaurants": OSMData.restaurants
-          .map(getOSMName)
+          .map(nodeToSpecificPlace)
           .filter(notFalsy),
-        cuisines: OSMData.restaurants.map(x =>
-          _.startCase(x.properties.cuisine)
-        )
+        cuisines: OSMData.restaurants
+          .filter(x => x.properties.cuisine)
+          .map(x =>
+            addMetaDataToString(x.properties.cuisine, {
+              keyValuePairs: [["cuisine", x.properties.cuisine]]
+            })
+          )
       },
       "tourist attractions": OSMData.touristAttractions
-        .map(getOSMName)
+        .map(nodeToSpecificPlace)
         .filter(notFalsy),
-      "leisure areas": OSMData.leisureAreas.map(getOSMName).filter(notFalsy)
+      "leisure areas": OSMData.leisureAreas
+        .map(nodeToSpecificPlace)
+        .filter(notFalsy),
+      "public transportation": [
+        addMetaDataToString("any", {
+          keyValuePairs: [
+            ["public_transport", "stop_position"],
+            ["public_transport", "platform"],
+            ["public_transport", "station"],
+            ["highway", "bus_stop"]
+          ]
+        })
+      ]
     };
   }
 
