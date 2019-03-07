@@ -243,3 +243,8 @@
   margin: 3px 21px 20px 13px !important;
   max-width: 250px;
 }
+
+// Overriding date picker styles here
+:global(.react-datepicker-popper) {
+  z-index: 1000000 !important;
+}
