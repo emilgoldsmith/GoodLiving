@@ -8,7 +8,6 @@ export default class ChooseDistanceModal extends Component {
       const label = i > 2 ? `${10 ** (i - 3)}km` : `${10 ** i}m`;
       marks[i * 10] = label;
     }
-    console.log(marks);
     return (
       <div>
         <Range

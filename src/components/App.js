@@ -18,6 +18,7 @@ NumericInput.style.input = {};
 NumericInput.style["input:not(.form-control)"] = {};
 // Overwriting default styles of Modal
 Modal.defaultStyles.overlay.zIndex = 1000000000000000;
+Modal.setAppElement("#root");
 
 const Filter = ({ iconType }) => {
   let icon, description;
