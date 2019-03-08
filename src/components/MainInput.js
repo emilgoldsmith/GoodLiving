@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import styles from "./MainInput.module.scss";
 import { geocode } from "../api/geocode/geocode-client";
-import { debounce } from "debounce";
-import { getTreeSuggestions } from "../lib/query-language-tree";
 
 // function disableBubbling(e) {
 //   e.preventDefault();

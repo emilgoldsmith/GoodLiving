@@ -27,6 +27,7 @@
     "react": "^16.5.2",
     "react-datepicker": "^2.1.0",
     "react-dom": "^16.5.2",
+    "react-modal": "^3.8.1",
     "react-numeric-input": "^2.2.3",
     "react-scripts": "^2.1.1",
     "request-promise-native": "^1.0.5",
@@ -57,6 +58,7 @@
     "@types/geolib": "^2.0.23",
     "@types/lodash": "^4.14.121",
     "@types/moment": "^2.13.0",
+    "@types/react-modal": "^3.8.1",
     "@types/react-numeric-input": "^2.2.3",
     "@types/throttle-debounce": "^1.1.0"
   }

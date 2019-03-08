@@ -10,10 +10,14 @@ import * as NumericInput from "react-numeric-input";
 import { Range } from "rc-slider";
 import * as _ from "lodash";
 import { debounce } from "throttle-debounce";
+import * as Modal from "react-modal";
+import ChooseDistanceModal from "./ChooseDistanceModal";
 import "rc-slider/assets/index.css";
 // Overwriting default styles of NumericInput
 NumericInput.style.input = {};
 NumericInput.style["input:not(.form-control)"] = {};
+// Overwriting default styles of Modal
+Modal.defaultStyles.overlay.zIndex = 1000000000000000;
 
 const Filter = ({ iconType }) => {
   let icon, description;
@@ -284,6 +288,9 @@ class App extends Component {
     let x = 0;
     return (
       <div className={styles.appContainer}>
+        <Modal isOpen>
+          <ChooseDistanceModal />
+        </Modal>
         <div className={styles.mapContainer}>
           <div className={styles.map} id="map" />
           <div className={styles.mapOverlayContainer}>
