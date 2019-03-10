@@ -10,10 +10,17 @@
   flex-direction: column;
 }
 
-.Title {
+.ButtonsContainer {
+  & > button {
+    margin: 0 5px;
+  }
 }
 
 .Range {
   margin: 30px 0 50px 0 !important;
   max-width: 400px;
+}
+
+.DistanceDisplay {
+  padding-top: 15px;
 }

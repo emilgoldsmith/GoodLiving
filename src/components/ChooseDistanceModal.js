@@ -31,16 +31,25 @@ export default class ChooseDistanceModal extends Component {
       distances: this.getValueRange()
     });
 
+  metersToDisplayString(dist) {
+    if (dist >= 1000) return `${(dist / 1000).toFixed(3)}km`;
+    return `${dist.toFixed(0)}m`;
+  }
+
   render() {
     const marks = { 0: "0m" };
     for (let i = 1; i <= this.maxPos; i++) {
-      const label = i > 2 ? `${10 ** (i - 3)}km` : `${10 ** i}m`;
+      const label = this.metersToDisplayString(10 ** i);
       marks[i] = label;
     }
+    const valueRange = this.getValueRange().map(this.metersToDisplayString);
     return (
       <div className={styles.Container}>
         <div className={styles.Title}>
           Choose Distance From {this.props.filterData.value}
+        </div>
+        <div className={styles.DistanceDisplay}>
+          {valueRange[0]} - {valueRange[1]}
         </div>
         <Range
           className={styles.Range}
@@ -53,9 +62,12 @@ export default class ChooseDistanceModal extends Component {
           value={this.state.posRange}
           onChange={this.handleRangeChange}
         />
-        <button className={styles.SubmitButton} onClick={this.handleSubmit}>
-          Submit
-        </button>
+        <div className={styles.ButtonsContainer}>
+          <button className={styles.SubmitButton} onClick={this.handleSubmit}>
+            Submit
+          </button>
+          <button onClick={this.closeModal}>Cancel</button>
+        </div>
       </div>
     );
   }
