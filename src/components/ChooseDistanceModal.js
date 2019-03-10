@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styles from "./ChooseDistanceModal.module.scss";
 import { Range } from "rc-slider";
 
 export default class ChooseDistanceModal extends Component {
@@ -31,8 +32,12 @@ export default class ChooseDistanceModal extends Component {
       marks[i] = label;
     }
     return (
-      <div>
+      <div className={styles.Container}>
+        <div className={styles.Title}>
+          Choose Distance From {this.props.title}
+        </div>
         <Range
+          className={styles.Range}
           min={this.minPos}
           max={this.maxPos}
           count={1}
@@ -42,11 +47,7 @@ export default class ChooseDistanceModal extends Component {
           value={this.state.posRange}
           onChange={this.handleRangeChange}
         />
-        {this.getValueRange().map(x => (
-          <div key={x} style={{ padding: "100px" }}>
-            {x}
-          </div>
-        ))}
+        <button className={styles.SubmitButton}>Submit</button>
       </div>
     );
   }

@@ -289,8 +289,18 @@ class App extends Component {
     let x = 0;
     return (
       <div className={styles.appContainer}>
-        <Modal isOpen>
-          <ChooseDistanceModal />
+        <Modal
+          isOpen
+          style={{
+            content: {
+              display: "flex",
+              background: "none",
+              border: "none",
+              justifyContent: "center"
+            }
+          }}
+        >
+          <ChooseDistanceModal title="Dummy " />
         </Modal>
         <div className={styles.mapContainer}>
           <div className={styles.map} id="map" />

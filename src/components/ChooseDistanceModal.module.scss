@@ -1,0 +1,19 @@
+.Container {
+  align-self: center;
+  min-width: 300px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 10px;
+  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+  padding: 50px 80px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Title {
+}
+
+.Range {
+  margin: 30px 0 50px 0 !important;
+  max-width: 400px;
+}
