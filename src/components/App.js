@@ -86,7 +86,9 @@ class App extends Component {
       roomType: "message",
       amenities: [],
       nearbyFilters: [],
-      amenityFilters: []
+      amenityFilters: [],
+      choosingDistance: false,
+      filterData: null
     };
 
     this.youAreHereIcon = L.icon({
@@ -269,28 +271,38 @@ class App extends Component {
       this.updateMap
     );
 
-  addNearbyFilter = (val, meta) => {
+  addNearbyFilter = ({ value, meta, distances: [minDist, maxDist] }) => {
     this.setState(
       state => ({
         nearbyFilters: state.nearbyFilters.concat([
           {
             keyValuePairs: meta.keyValuePairs,
             requireAllPairs: meta.requireAllPairs,
-            minDist: 0,
-            maxDist: 1000
+            minDist,
+            maxDist
           }
-        ])
+        ]),
+        choosingDistance: false,
+        filterData: null
       }),
       this.updateMap
     );
   };
+
+  redirectToSelectDistance = (value, meta) =>
+    this.setState({ choosingDistance: true, filterData: { value, meta } });
+
+  closeModal = () =>
+    this.setState({ choosingDistance: false, filterData: null });
 
   render() {
     let x = 0;
     return (
       <div className={styles.appContainer}>
         <Modal
-          isOpen
+          isOpen={this.state.choosingDistance}
+          onRequestClose={this.closeModal}
+          contentLabel="Select distance for filter"
           style={{
             content: {
               display: "flex",
@@ -300,7 +312,11 @@ class App extends Component {
             }
           }}
         >
-          <ChooseDistanceModal title="Dummy " />
+          <ChooseDistanceModal
+            filterData={this.state.filterData}
+            closeModal={this.closeModal}
+            submitDistance={this.addNearbyFilter}
+          />
         </Modal>
         <div className={styles.mapContainer}>
           <div className={styles.map} id="map" />
@@ -385,7 +401,7 @@ class App extends Component {
                   <FormInput
                     placeholder="What would you like to be near?"
                     data={this.state.nearData}
-                    addFilter={this.addNearbyFilter}
+                    addFilter={this.redirectToSelectDistance}
                   />
                 </div>
               </div>

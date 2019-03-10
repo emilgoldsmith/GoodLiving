@@ -25,6 +25,12 @@ export default class ChooseDistanceModal extends Component {
     this.setState({ posRange: newRange });
   };
 
+  handleSubmit = () =>
+    this.props.submitDistance({
+      ...this.props.filterData,
+      distances: this.getValueRange()
+    });
+
   render() {
     const marks = { 0: "0m" };
     for (let i = 1; i <= this.maxPos; i++) {
@@ -34,7 +40,7 @@ export default class ChooseDistanceModal extends Component {
     return (
       <div className={styles.Container}>
         <div className={styles.Title}>
-          Choose Distance From {this.props.title}
+          Choose Distance From {this.props.filterData.value}
         </div>
         <Range
           className={styles.Range}
@@ -47,7 +53,9 @@ export default class ChooseDistanceModal extends Component {
           value={this.state.posRange}
           onChange={this.handleRangeChange}
         />
-        <button className={styles.SubmitButton}>Submit</button>
+        <button className={styles.SubmitButton} onClick={this.handleSubmit}>
+          Submit
+        </button>
       </div>
     );
   }
