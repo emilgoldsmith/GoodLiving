@@ -312,11 +312,13 @@ class App extends Component {
             }
           }}
         >
-          <ChooseDistanceModal
-            filterData={this.state.filterData}
-            closeModal={this.closeModal}
-            submitDistance={this.addNearbyFilter}
-          />
+          {this.state.choosingDistance && (
+            <ChooseDistanceModal
+              filterData={this.state.filterData}
+              closeModal={this.closeModal}
+              submitDistance={this.addNearbyFilter}
+            />
+          )}
         </Modal>
         <div className={styles.mapContainer}>
           <div className={styles.map} id="map" />
