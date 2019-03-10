@@ -53,22 +53,33 @@ const Filter = ({ iconType }) => {
   );
 };
 
-const PropertyResult = ({ previewUrl, title, subtitle, attributes }) => {
+const PropertyResult = ({
+  previewUrl,
+  title,
+  subtitle,
+  attributes,
+  listingId
+}) => {
   let x = 0;
   return (
-    <div className={styles.propertyResult}>
-      <div className={styles.propertyAttributesContainer}>
+    <a
+      className={styles.propertyResult}
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`https://www.airbnb.com/rooms/${listingId}`}
+    >
+      {/* <div className={styles.propertyAttributesContainer}>
         <h1>Attributes</h1>
         {attributes.map(singleAttribute => (
           <Filter iconType="gym" key={x++} />
         ))}
-      </div>
+      </div> */}
       <div className={styles.leftHandSide}>
         <h1>{title}</h1>
         <h2>{subtitle}</h2>
         <img src={previewUrl} alt="property preview" />
       </div>
-    </div>
+    </a>
   );
 };
 
@@ -433,8 +444,8 @@ class App extends Component {
                 title={result.title}
                 subtitle={result.type}
                 previewUrl={result.picture}
+                listingId={result.id}
                 key={`${result.title} ${result.latitude} ${result.longitude}`}
-                attributes={Array(3).fill(0)}
               />
             ))}
           </div>
