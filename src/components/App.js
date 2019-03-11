@@ -262,7 +262,7 @@ class App extends Component {
         .filter(notFalsy)
         .filter(isNotAlreadyPicked),
       "public transportation": [
-        addMetaDataToString("any", {
+        addMetaDataToString("Any Public Transportation", {
           keyValuePairs: [
             ["public_transport", "stop_position"],
             ["public_transport", "platform"],
