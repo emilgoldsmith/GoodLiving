@@ -11,6 +11,7 @@ import { Range } from "rc-slider";
 import * as _ from "lodash";
 import { debounce } from "throttle-debounce";
 import * as Modal from "react-modal";
+import Spinner from "./Spinner";
 import ChooseDistanceModal, {
   metersToDisplayString
 } from "./ChooseDistanceModal";
@@ -135,7 +136,8 @@ class App extends Component {
       nearbyFilters: [],
       amenityFilters: [],
       choosingDistance: false,
-      filterData: null
+      filterData: null,
+      loading: true
     };
 
     this.youAreHereIcon = L.icon({
@@ -168,32 +170,39 @@ class App extends Component {
   };
 
   updateMap = debounce(750, async event => {
-    const bounds = this.map.getBounds();
-    const { lng: swLong, lat: swLat } = bounds.getSouthWest();
-    const { lng: neLong, lat: neLat } = bounds.getNorthEast();
-    const { airbnbResults: results, OSMData } = await queryGeneralData(
-      swLat,
-      swLong,
-      neLat,
-      neLong,
-      this.state.minPrice,
-      this.state.maxPrice,
-      moment(this.state.minDate).isValid()
-        ? moment(this.state.minDate).format("YYYY-MM-DD")
-        : "",
-      moment(this.state.maxDate).isValid()
-        ? moment(this.state.maxDate).format("YYYY-MM-DD")
-        : "",
-      this.state.numGuests,
-      this.state.roomType === "message" ? "" : this.state.roomType,
-      this.state.amenityFilters,
-      this.state.nearbyFilters
-    );
-    this.updateResults(results);
-    this.setState({
-      results: results.slice(0, 10),
-      nearData: this.formatOSMData(OSMData)
-    });
+    this.setState({ loading: true });
+    try {
+      const bounds = this.map.getBounds();
+      const { lng: swLong, lat: swLat } = bounds.getSouthWest();
+      const { lng: neLong, lat: neLat } = bounds.getNorthEast();
+      const { airbnbResults: results, OSMData } = await queryGeneralData(
+        swLat,
+        swLong,
+        neLat,
+        neLong,
+        this.state.minPrice,
+        this.state.maxPrice,
+        moment(this.state.minDate).isValid()
+          ? moment(this.state.minDate).format("YYYY-MM-DD")
+          : "",
+        moment(this.state.maxDate).isValid()
+          ? moment(this.state.maxDate).format("YYYY-MM-DD")
+          : "",
+        this.state.numGuests,
+        this.state.roomType === "message" ? "" : this.state.roomType,
+        this.state.amenityFilters,
+        this.state.nearbyFilters
+      );
+      this.updateResults(results);
+      this.setState({
+        results: results.slice(0, 10),
+        nearData: this.formatOSMData(OSMData),
+        loading: false
+      });
+    } catch (e) {
+      console.error(e);
+      this.setState({ loading: false });
+    }
   });
 
   formatOSMData(OSMData) {
@@ -491,6 +500,13 @@ class App extends Component {
                     addFilter={this.redirectToSelectDistance}
                   />
                 </div>
+              </div>
+              <div
+                className={`${styles.clickThroughContainer} ${
+                  styles.loadingContainer
+                }`}
+              >
+                {this.state.loading && <Spinner />}
               </div>
             </div>
             <button
