@@ -168,11 +168,13 @@ class App extends Component {
         this.map
       )
     );
-    this.setState({
+    this.setState(state => ({
       amenities: _.uniq(
         _.flatten(listings.map(listing => listing.amenities.map(x => x.name)))
+      ).filter(
+        amenity => state.amenityFilters.findIndex(x => x === amenity) === -1
       )
-    });
+    }));
   };
 
   updateMap = debounce(750, async event => {
