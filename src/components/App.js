@@ -71,9 +71,13 @@ class Filter extends Component {
       <div className={styles.filter}>
         <div
           className={styles.filterText}
-          title={`${filterValue} ${metersToDisplayString(
+          title={
             this.props.minDist
-          )} - ${metersToDisplayString(this.props.maxDist)}`}
+              ? `${filterValue} ${metersToDisplayString(
+                  this.props.minDist
+                )} - ${metersToDisplayString(this.props.maxDist)}`
+              : filterValue
+          }
         >
           {filterValue}
         </div>
@@ -81,9 +85,11 @@ class Filter extends Component {
           <button className={styles.filterButton} onClick={this.remove}>
             <i className="fas fa-trash-alt" />
           </button>
-          <button className={styles.filterButton} onClick={this.edit}>
-            <i className="fas fa-cog" />
-          </button>
+          {this.props.editFilter && (
+            <button className={styles.filterButton} onClick={this.edit}>
+              <i className="fas fa-cog" />
+            </button>
+          )}
         </div>
       </div>
     );
@@ -395,6 +401,19 @@ class App extends Component {
     }, this.updateMap);
   };
 
+  removeAmenityFilter = value => {
+    this.setState(state => {
+      const index = state.amenityFilters.findIndex(x => x === value);
+      if (index === -1) {
+        console.error("Couldn't find amenity filter:", value);
+        return {};
+      }
+      const newAmenityFilters = state.amenityFilters.slice();
+      newAmenityFilters.splice(index, 1);
+      return { amenityFilters: newAmenityFilters };
+    }, this.updateMap);
+  };
+
   render() {
     let x = 0;
     return (
@@ -550,11 +569,18 @@ class App extends Component {
             <div className={styles.filtersContainer}>
               {this.state.nearbyFilters.map(x => (
                 <Filter
-                  key={x.value}
+                  key={`nearby - ${x.value}`}
                   filterValue={x.value}
                   {...x}
                   removeFilter={this.removeNearbyFilter}
                   editFilter={this.redirectToEditDistance}
+                />
+              ))}
+              {this.state.amenityFilters.map(value => (
+                <Filter
+                  key={`nearby - ${value}`}
+                  filterValue={value}
+                  removeFilter={this.removeAmenityFilter}
                 />
               ))}
             </div>
