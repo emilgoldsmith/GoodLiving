@@ -205,7 +205,7 @@ class App extends Component {
     }
   });
 
-  formatOSMData(OSMData) {
+  formatOSMData = OSMData => {
     const getOSMName = node =>
       node.properties["name:en"] || node.properties.name;
     const notFalsy = x => x;
@@ -224,12 +224,15 @@ class App extends Component {
         keyValuePairs: nodeToKeyValuePairs(node),
         requireAllPairs: true
       });
+    const isNotAlreadyPicked = obj =>
+      this.state.nearbyFilters.findIndex(x => x.value === obj.value) === -1;
 
     return {
       restaurants: {
         "specific restaurants": OSMData.restaurants
           .map(nodeToSpecificPlace)
-          .filter(notFalsy),
+          .filter(notFalsy)
+          .filter(isNotAlreadyPicked),
         cuisines: OSMData.restaurants
           .filter(x => x.properties.cuisine)
           .map(x =>
@@ -238,13 +241,16 @@ class App extends Component {
               requireAllPairs: true
             })
           )
+          .filter(isNotAlreadyPicked)
       },
       "tourist attractions": OSMData.touristAttractions
         .map(nodeToSpecificPlace)
-        .filter(notFalsy),
+        .filter(notFalsy)
+        .filter(isNotAlreadyPicked),
       "leisure areas": OSMData.leisureAreas
         .map(nodeToSpecificPlace)
-        .filter(notFalsy),
+        .filter(notFalsy)
+        .filter(isNotAlreadyPicked),
       "public transportation": [
         addMetaDataToString("any", {
           keyValuePairs: [
@@ -252,11 +258,11 @@ class App extends Component {
             ["public_transport", "platform"],
             ["public_transport", "station"],
             ["highway", "bus_stop"]
-          ]
+          ].filter(isNotAlreadyPicked)
         })
       ]
     };
-  }
+  };
 
   componentDidMount() {
     // L is the LeafletJS variable
