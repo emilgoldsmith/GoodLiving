@@ -9,7 +9,7 @@
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: auto 400px;
+  grid-template-columns: auto 450px;
   grid-template-rows: auto;
   grid-template-areas: "map sidebar";
 }
@@ -36,7 +36,7 @@
 
 .mapOverlayContainer {
   @extend .clickThroughContainer;
-  width: calc(100vw - 410px);
+  width: calc(100vw - 460px);
   height: 100%;
   position: absolute;
   top: 0;
@@ -118,9 +118,33 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  min-height: 70px;
 }
 
 .filter {
+  display: flex;
+  padding: 10px;
+  background: #cac9c9;
+  box-sizing: content-box;
+  margin: 0 10px 10px 10px;
+  border-radius: 10px;
+  align-items: center;
+
+  .filterText {
+    max-width: 100px;
+    margin-right: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .filterButtonsContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.oldFilter {
   display: flex;
   padding: 10px;
   background: #cac9c9;

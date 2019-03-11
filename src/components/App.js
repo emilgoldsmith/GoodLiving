@@ -20,7 +20,7 @@ NumericInput.style["input:not(.form-control)"] = {};
 Modal.defaultStyles.overlay.zIndex = 1000000000000000;
 Modal.setAppElement("#root");
 
-const Filter = ({ iconType }) => {
+const OldFilter = ({ iconType }) => {
   let icon, description;
   switch (iconType) {
     case "gym":
@@ -41,7 +41,7 @@ const Filter = ({ iconType }) => {
   }
 
   return (
-    <div className={styles.filter}>
+    <div className={styles.oldFilter}>
       {icon}
       {description}
       <div className={styles.growingFlex}>
@@ -52,6 +52,25 @@ const Filter = ({ iconType }) => {
     </div>
   );
 };
+
+class Filter extends Component {
+  render() {
+    const { filterValue } = this.props;
+    return (
+      <div className={styles.filter}>
+        <div className={styles.filterText}>{filterValue}</div>
+        <div className={styles.filterButtonsContainer}>
+          <button className={styles.filterButton} onClick={this.remove}>
+            <i className="fas fa-times" />
+          </button>
+          <button className={styles.filterButton} onClick={this.edit}>
+            <i className="fas fa-cog" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
 
 const PropertyResult = ({
   previewUrl,
@@ -287,6 +306,7 @@ class App extends Component {
       state => ({
         nearbyFilters: state.nearbyFilters.concat([
           {
+            value,
             keyValuePairs: meta.keyValuePairs,
             requireAllPairs: meta.requireAllPairs,
             minDist,
@@ -452,8 +472,8 @@ class App extends Component {
           <div className={styles.filterSection}>
             <h2>Filters</h2>
             <div className={styles.filtersContainer}>
-              {new Array(8).fill(0).map(_i => (
-                <Filter iconType="gym" key={x++} />
+              {this.state.nearbyFilters.map(x => (
+                <Filter key={x.value} filterValue={x.value} {...x} />
               ))}
             </div>
           </div>
