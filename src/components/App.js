@@ -55,6 +55,7 @@ const OldFilter = ({ iconType }) => {
 
 class Filter extends Component {
   remove = () => this.props.removeFilter(this.props.filterValue);
+  edit = () => this.props.editFilter(this.props.filterValue);
 
   render() {
     const { filterValue } = this.props;
@@ -304,9 +305,23 @@ class App extends Component {
     );
 
   addNearbyFilter = ({ value, meta, distances: [minDist, maxDist] }) => {
-    this.setState(
-      state => ({
-        nearbyFilters: state.nearbyFilters.concat([
+    this.setState(state => {
+      let newNearbyFilters;
+      if (state.editingDistance) {
+        newNearbyFilters = state.nearbyFilters.slice();
+        const indexToEdit = newNearbyFilters.findIndex(x => x.value === value);
+        if (indexToEdit === -1) {
+          console.error("Can't find any filter with value", value);
+          // Just let newNearbyFilters be the copy
+        } else {
+          newNearbyFilters[indexToEdit] = {
+            ...newNearbyFilters[indexToEdit],
+            minDist,
+            maxDist
+          };
+        }
+      } else {
+        newNearbyFilters = state.nearbyFilters.concat([
           {
             value,
             keyValuePairs: meta.keyValuePairs,
@@ -314,19 +329,29 @@ class App extends Component {
             minDist,
             maxDist
           }
-        ]),
+        ]);
+      }
+      return {
+        nearbyFilters: newNearbyFilters,
         choosingDistance: false,
+        editingDistance: false,
         filterData: null
-      }),
-      this.updateMap
-    );
+      };
+    }, this.updateMap);
   };
 
   redirectToSelectDistance = (value, meta) =>
     this.setState({ choosingDistance: true, filterData: { value, meta } });
 
+  redirectToEditDistance = value =>
+    this.setState({ editingDistance: true, filterData: { value } });
+
   closeModal = () =>
-    this.setState({ choosingDistance: false, filterData: null });
+    this.setState({
+      choosingDistance: false,
+      editingDistance: false,
+      filterData: null
+    });
 
   removeNearbyFilter = value => {
     this.setState(state => {
@@ -346,7 +371,7 @@ class App extends Component {
     return (
       <div className={styles.appContainer}>
         <Modal
-          isOpen={this.state.choosingDistance}
+          isOpen={this.state.choosingDistance || this.state.editingDistance}
           onRequestClose={this.closeModal}
           contentLabel="Select distance for filter"
           style={{
@@ -358,7 +383,7 @@ class App extends Component {
             }
           }}
         >
-          {this.state.choosingDistance && (
+          {(this.state.choosingDistance || this.state.editingDistance) && (
             <ChooseDistanceModal
               filterData={this.state.filterData}
               closeModal={this.closeModal}
@@ -493,6 +518,7 @@ class App extends Component {
                   filterValue={x.value}
                   {...x}
                   removeFilter={this.removeNearbyFilter}
+                  editFilter={this.redirectToEditDistance}
                 />
               ))}
             </div>
