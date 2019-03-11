@@ -496,13 +496,13 @@ class App extends Component {
           <div className={styles.propertiesContainer}>
             <div className={styles.propertiesHeaderContainer}>
               <h2>Results</h2>
-              <div className={styles.sortContainer}>
+              {/* <div className={styles.sortContainer}>
                 Sort by:
                 <select>
                   <option value="best fit">Best Fit</option>
                   <option value="cheapest">Cheapest</option>
                 </select>
-              </div>
+              </div> */}
             </div>
             {this.state.results.map(result => (
               <PropertyResult
