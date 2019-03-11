@@ -72,11 +72,13 @@ class Filter extends Component {
         <div
           className={styles.filterText}
           title={
-            this.props.minDist
-              ? `${filterValue} ${metersToDisplayString(
+            this.props.minDist !== undefined
+              ? `Between ${metersToDisplayString(
                   this.props.minDist
-                )} - ${metersToDisplayString(this.props.maxDist)}`
-              : filterValue
+                )} and ${metersToDisplayString(
+                  this.props.maxDist
+                )} from ${filterValue}`
+              : `Has ${filterValue}`
           }
         >
           {filterValue}
