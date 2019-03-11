@@ -119,6 +119,8 @@
   flex-wrap: wrap;
   flex-direction: row;
   min-height: 70px;
+  max-height: 40vh;
+  overflow-y: auto;
 }
 
 .filter {
