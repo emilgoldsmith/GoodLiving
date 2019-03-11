@@ -54,6 +54,8 @@ const OldFilter = ({ iconType }) => {
 };
 
 class Filter extends Component {
+  remove = () => this.props.removeFilter(this.props.filterValue);
+
   render() {
     const { filterValue } = this.props;
     return (
@@ -326,6 +328,19 @@ class App extends Component {
   closeModal = () =>
     this.setState({ choosingDistance: false, filterData: null });
 
+  removeNearbyFilter = value => {
+    this.setState(state => {
+      const index = state.nearbyFilters.findIndex(x => x.value === value);
+      if (index === -1) {
+        console.error("Couldn't find nearbyFilter", value);
+        return {};
+      }
+      const newNearbyFilters = state.nearbyFilters.slice();
+      newNearbyFilters.splice(index, 1);
+      return { nearbyFilters: newNearbyFilters };
+    }, this.updateMap);
+  };
+
   render() {
     let x = 0;
     return (
@@ -473,7 +488,12 @@ class App extends Component {
             <h2>Filters</h2>
             <div className={styles.filtersContainer}>
               {this.state.nearbyFilters.map(x => (
-                <Filter key={x.value} filterValue={x.value} {...x} />
+                <Filter
+                  key={x.value}
+                  filterValue={x.value}
+                  {...x}
+                  removeFilter={this.removeNearbyFilter}
+                />
               ))}
             </div>
           </div>
