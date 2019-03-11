@@ -61,7 +61,7 @@ class Filter extends Component {
         <div className={styles.filterText}>{filterValue}</div>
         <div className={styles.filterButtonsContainer}>
           <button className={styles.filterButton} onClick={this.remove}>
-            <i className="fas fa-times" />
+            <i className="fas fa-trash-alt" />
           </button>
           <button className={styles.filterButton} onClick={this.edit}>
             <i className="fas fa-cog" />
