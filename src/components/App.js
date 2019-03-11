@@ -11,7 +11,9 @@ import { Range } from "rc-slider";
 import * as _ from "lodash";
 import { debounce } from "throttle-debounce";
 import * as Modal from "react-modal";
-import ChooseDistanceModal from "./ChooseDistanceModal";
+import ChooseDistanceModal, {
+  metersToDisplayString
+} from "./ChooseDistanceModal";
 import "rc-slider/assets/index.css";
 // Overwriting default styles of NumericInput
 NumericInput.style.input = {};
@@ -66,7 +68,14 @@ class Filter extends Component {
     const { filterValue } = this.props;
     return (
       <div className={styles.filter}>
-        <div className={styles.filterText}>{filterValue}</div>
+        <div
+          className={styles.filterText}
+          title={`${filterValue} ${metersToDisplayString(
+            this.props.minDist
+          )} - ${metersToDisplayString(this.props.maxDist)}`}
+        >
+          {filterValue}
+        </div>
         <div className={styles.filterButtonsContainer}>
           <button className={styles.filterButton} onClick={this.remove}>
             <i className="fas fa-trash-alt" />

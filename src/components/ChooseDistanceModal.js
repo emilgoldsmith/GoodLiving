@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import styles from "./ChooseDistanceModal.module.scss";
 import { Range } from "rc-slider";
 
+export function metersToDisplayString(dist, useDecimals = true) {
+  if (dist >= 1000) return `${(dist / 1000).toFixed(useDecimals ? 3 : 0)}km`;
+  return `${dist.toFixed(0)}m`;
+}
+
 export default class ChooseDistanceModal extends Component {
   constructor(props) {
     super(props);
@@ -43,18 +48,13 @@ export default class ChooseDistanceModal extends Component {
       distances: this.getValueRange()
     });
 
-  metersToDisplayString(dist, useDecimals = true) {
-    if (dist >= 1000) return `${(dist / 1000).toFixed(useDecimals ? 3 : 0)}km`;
-    return `${dist.toFixed(0)}m`;
-  }
-
   render() {
     const marks = { 0: "0m" };
     for (let i = 1; i <= this.maxPos; i++) {
-      const label = this.metersToDisplayString(10 ** i, false);
+      const label = metersToDisplayString(10 ** i, false);
       marks[i * 100] = label;
     }
-    const valueRange = this.getValueRange().map(this.metersToDisplayString);
+    const valueRange = this.getValueRange().map(metersToDisplayString);
     return (
       <div className={styles.Container}>
         <div className={styles.Title}>
