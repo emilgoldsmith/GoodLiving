@@ -55,7 +55,12 @@ const OldFilter = ({ iconType }) => {
 
 class Filter extends Component {
   remove = () => this.props.removeFilter(this.props.filterValue);
-  edit = () => this.props.editFilter(this.props.filterValue);
+  edit = () =>
+    this.props.editFilter({
+      value: this.props.filterValue,
+      minDist: this.props.minDist,
+      maxDist: this.props.maxDist
+    });
 
   render() {
     const { filterValue } = this.props;
@@ -343,8 +348,8 @@ class App extends Component {
   redirectToSelectDistance = (value, meta) =>
     this.setState({ choosingDistance: true, filterData: { value, meta } });
 
-  redirectToEditDistance = value =>
-    this.setState({ editingDistance: true, filterData: { value } });
+  redirectToEditDistance = filterData =>
+    this.setState({ editingDistance: true, filterData });
 
   closeModal = () =>
     this.setState({

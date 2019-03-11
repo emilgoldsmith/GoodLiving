@@ -3,12 +3,19 @@ import styles from "./ChooseDistanceModal.module.scss";
 import { Range } from "rc-slider";
 
 export default class ChooseDistanceModal extends Component {
-  constructor(...props) {
-    super(...props);
+  constructor(props) {
+    super(props);
     this.minPos = 0;
     this.maxPos = 5;
     this.state = {
-      posRange: [this.minPos, this.maxPos * 100]
+      posRange: [
+        props.filterData.minDist === undefined
+          ? this.minPos
+          : this.valueToPos(props.filterData.minDist),
+        props.filterData.maxDist === undefined
+          ? this.maxPos * 100
+          : this.valueToPos(props.filterData.maxDist)
+      ]
     };
   }
 
@@ -20,6 +27,11 @@ export default class ChooseDistanceModal extends Component {
     if (position === 0) return 0;
     return 10 ** (position / 100);
   };
+
+  valueToPos(value) {
+    if (value === 0) return 0;
+    return 100 * Math.log10(value);
+  }
 
   handleRangeChange = newRange => {
     this.setState({ posRange: newRange });
