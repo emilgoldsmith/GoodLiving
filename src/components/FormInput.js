@@ -67,9 +67,10 @@ export default class FormInput extends Component {
       })
       .filter(
         x =>
-          getStringValue(x)
-            .toLowerCase()
-            .startsWith(this.state.inputValue.toLowerCase()) &&
+          // Check that input is contained in suggestions
+          new RegExp(this.state.inputValue.toLowerCase()).test(
+            getStringValue(x).toLowerCase()
+          ) &&
           getStringValue(x).toLowerCase() !==
             this.state.inputValue.toLowerCase()
       )
