@@ -145,7 +145,8 @@ class App extends Component {
       amenityFilters: [],
       choosingDistance: false,
       filterData: null,
-      loading: true
+      loading: false,
+      hasLoadedFirstTime: false
     };
 
     this.youAreHereIcon = L.icon({
@@ -207,11 +208,12 @@ class App extends Component {
       this.setState({
         results: results.slice(0, 10),
         nearData: this.formatOSMData(OSMData),
-        loading: false
+        loading: false,
+        hasLoadedFirstTime: true
       });
     } catch (e) {
       console.error(e);
-      this.setState({ loading: false });
+      this.setState({ loading: false, hasLoadedFirstTime: true });
     }
   });
 
@@ -419,7 +421,6 @@ class App extends Component {
   };
 
   render() {
-    let x = 0;
     return (
       <div className={styles.appContainer}>
         <Modal
@@ -558,15 +559,29 @@ class App extends Component {
                 </select>
               </div> */}
             </div>
-            {this.state.results.map(result => (
-              <PropertyResult
-                title={result.title}
-                subtitle={result.type}
-                previewUrl={result.picture}
-                listingId={result.id}
-                key={`${result.title} ${result.latitude} ${result.longitude}`}
-              />
-            ))}
+            {this.state.results.length > 0 ? (
+              <div className={styles.resultsContainer}>
+                {this.state.results.map(result => (
+                  <PropertyResult
+                    title={result.title}
+                    subtitle={result.type}
+                    previewUrl={result.picture}
+                    listingId={result.id}
+                    key={`${result.title} ${result.latitude} ${
+                      result.longitude
+                    }`}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className={styles.noResultsExplanation}>
+                <span>
+                  {this.state.hasLoadedFirstTime
+                    ? "There were no results matching these constraints. Please try changing location or removing some of your filters to find matching properties"
+                    : "Fetching available properties..."}
+                </span>
+              </div>
+            )}
           </div>
           <div className={styles.filterSection}>
             <h2>Filters</h2>

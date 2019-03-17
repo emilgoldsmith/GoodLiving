@@ -65,6 +65,24 @@
 .propertiesContainer {
   flex-grow: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  .noResultsExplanation,
+  .resultsContainer {
+    flex-grow: 1;
+  }
+
+  .noResultsExplanation > span {
+    display: block;
+    text-align: center;
+  }
+
+  .noResultsExplanation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
   .propertiesHeaderContainer {
     display: flex;
