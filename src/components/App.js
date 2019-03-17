@@ -585,24 +585,33 @@ class App extends Component {
           </div>
           <div className={styles.filterSection}>
             <h2>Filters</h2>
-            <div className={styles.filtersContainer}>
-              {this.state.nearbyFilters.map(x => (
-                <Filter
-                  key={`nearby - ${x.value}`}
-                  filterValue={x.value}
-                  {...x}
-                  removeFilter={this.removeNearbyFilter}
-                  editFilter={this.redirectToEditDistance}
-                />
-              ))}
-              {this.state.amenityFilters.map(value => (
-                <Filter
-                  key={`nearby - ${value}`}
-                  filterValue={value}
-                  removeFilter={this.removeAmenityFilter}
-                />
-              ))}
-            </div>
+            {this.state.nearbyFilters.length + this.state.amenityFilters > 0 ? (
+              <div className={styles.filtersContainer}>
+                {this.state.nearbyFilters.map(x => (
+                  <Filter
+                    key={`nearby - ${x.value}`}
+                    filterValue={x.value}
+                    {...x}
+                    removeFilter={this.removeNearbyFilter}
+                    editFilter={this.redirectToEditDistance}
+                  />
+                ))}
+                {this.state.amenityFilters.map(value => (
+                  <Filter
+                    key={`nearby - ${value}`}
+                    filterValue={value}
+                    removeFilter={this.removeAmenityFilter}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className={styles.noFiltersExplanation}>
+                <span>
+                  Select desired amenities or places and services you would like
+                  to be near/far from for filters to show up here
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

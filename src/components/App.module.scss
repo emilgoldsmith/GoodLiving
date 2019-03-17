@@ -73,15 +73,14 @@
     flex-grow: 1;
   }
 
-  .noResultsExplanation > span {
-    display: block;
-    text-align: center;
-  }
-
   .noResultsExplanation {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    > span {
+      display: block;
+      text-align: center;
+    }
   }
 
   .propertiesHeaderContainer {
@@ -139,6 +138,16 @@
   min-height: 70px;
   max-height: 40vh;
   overflow-y: auto;
+}
+
+.noFiltersExplanation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 15px;
+  > span {
+    text-align: center;
+  }
 }
 
 .filter {
