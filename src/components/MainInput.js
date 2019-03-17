@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { debounce } from "throttle-debounce";
 import styles from "./MainInput.module.scss";
 import { geocode } from "../api/geocode/geocode-client";
 
@@ -66,7 +67,7 @@ export default class MainInput extends Component {
     );
   };
 
-  async generateSuggestions() {
+  generateSuggestions = debounce(500, async () => {
     // const suggestions = getTreeSuggestions(query.split(" ").filter(x => x));
     // const stringSuggestions = suggestions.map(
     //   x => x.stringValue || x.placeholder
@@ -82,7 +83,7 @@ export default class MainInput extends Component {
         longitude: singleResult.lon
       }))
     });
-  }
+  });
 
   clearSuggestions = () => {
     this.setState({
