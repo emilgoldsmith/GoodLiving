@@ -103,8 +103,8 @@ const PropertyResult = ({
   previewUrl,
   title,
   subtitle,
-  attributes,
   listingId,
+  priceString,
   isPopup
 }) => {
   let x = 0;
@@ -126,6 +126,7 @@ const PropertyResult = ({
       <div className={styles.leftHandSide}>
         <h1>{title}</h1>
         <h2>{subtitle}</h2>
+        <h2>{priceString}</h2>
         <img src={previewUrl} alt="property preview" />
       </div>
     </a>
@@ -179,6 +180,7 @@ class App extends Component {
               subtitle={singleLocation.type}
               previewUrl={singleLocation.picture}
               listingId={singleLocation.id}
+              priceString={singleLocation.priceString}
               isPopup
             />
           )
@@ -581,6 +583,7 @@ class App extends Component {
                     subtitle={result.type}
                     previewUrl={result.picture}
                     listingId={result.id}
+                    priceString={result.priceString}
                     key={`${result.title} ${result.latitude} ${
                       result.longitude
                     }`}
