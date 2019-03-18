@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import styles from "./App.module.scss";
 import { queryGeneralData } from "../api/general-api-client";
 import MainInput from "./MainInput";
@@ -103,12 +104,15 @@ const PropertyResult = ({
   title,
   subtitle,
   attributes,
-  listingId
+  listingId,
+  isPopup
 }) => {
   let x = 0;
   return (
     <a
-      className={styles.propertyResult}
+      className={`${styles.propertyResult}${
+        isPopup ? ` ${styles.isPopup}` : ""
+      }`}
       target="_blank"
       rel="noopener noreferrer"
       href={`https://www.airbnb.com/rooms/${listingId}`}
@@ -167,9 +171,19 @@ class App extends Component {
   updateResults = listings => {
     this.markers.forEach(oldMarker => oldMarker.remove());
     this.markers = listings.map(singleLocation =>
-      L.marker([singleLocation.latitude, singleLocation.longitude]).addTo(
-        this.map
-      )
+      L.marker([singleLocation.latitude, singleLocation.longitude])
+        .bindPopup(
+          renderToStaticMarkup(
+            <PropertyResult
+              title={singleLocation.title}
+              subtitle={singleLocation.type}
+              previewUrl={singleLocation.picture}
+              listingId={singleLocation.id}
+              isPopup
+            />
+          )
+        )
+        .addTo(this.map)
     );
     this.setState(state => ({
       amenities: _.uniq(
