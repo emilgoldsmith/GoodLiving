@@ -23,6 +23,7 @@ export default class FormInput extends Component {
       this.props.addFilter(val, meta);
       this.setState({
         inputValue: "",
+        suggestionPath: [],
         displaySuggestions: false
       });
     } else {
