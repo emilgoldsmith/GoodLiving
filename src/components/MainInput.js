@@ -87,7 +87,8 @@ export default class MainInput extends Component {
 
   clearSuggestions = () => {
     this.setState({
-      suggestions: []
+      suggestions: [],
+      inputValue: ""
     });
   };
 

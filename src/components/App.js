@@ -602,7 +602,9 @@ class App extends Component {
           </div>
           <div className={styles.filterSection}>
             <h2>Filters</h2>
-            {this.state.nearbyFilters.length + this.state.amenityFilters > 0 ? (
+            {this.state.nearbyFilters.length +
+              this.state.amenityFilters.length >
+            0 ? (
               <div className={styles.filtersContainer}>
                 {this.state.nearbyFilters.map(x => (
                   <Filter
