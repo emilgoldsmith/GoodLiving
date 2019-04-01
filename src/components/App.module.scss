@@ -46,6 +46,17 @@
   * {
     z-index: 1000;
   }
+  & > .userNotification {
+    width: 300px;
+    padding: 50px 20px;
+    position: absolute;
+    left: calc(50% - 300px / 2);
+    top: calc(50% - 200px / 2);
+    border-radius: 10px;
+    border: 3px solid darkgrey;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+  }
 }
 
 .sidebarContainer {

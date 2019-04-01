@@ -205,10 +205,14 @@ class App extends Component {
     }));
   };
 
+  isTooZoomedOut = () => {
+    return this.map && this.map.getZoom() < 10;
+  };
+
   updateMap = debounce(750, async event => {
     this.setState({ loading: true });
     try {
-      if (this.map.getZoom() < 10) {
+      if (this.isTooZoomedOut()) {
         // Zoomed out too far. TODO: we should notify user somehow
         this.setState({
           loading: false,
@@ -483,6 +487,12 @@ class App extends Component {
         <div className={styles.mapContainer}>
           <div className={styles.map} id="map" />
           <div className={styles.mapOverlayContainer}>
+            {this.isTooZoomedOut() && (
+              <div className={styles.userNotification}>
+                There is too much data at this zoom level, please zoom in closer
+                for us to show you results
+              </div>
+            )}
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
               <div
