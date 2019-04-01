@@ -213,13 +213,15 @@ class App extends Component {
     this.setState({ loading: true });
     try {
       if (this.isTooZoomedOut()) {
-        // Zoomed out too far. TODO: we should notify user somehow
+        // Zoomed out too far
         this.setState({
           loading: false,
           hasLoadedFirstTime: true,
           results: [],
           nearData: []
         });
+        // Clears all markers
+        this.updateResults([]);
         return;
       }
 
@@ -244,6 +246,10 @@ class App extends Component {
         this.state.amenityFilters,
         this.state.nearbyFilters
       );
+      // Don't update results if we're too zoomed out
+      if (this.isTooZoomedOut()) {
+        return;
+      }
       this.updateResults(results);
       this.setState({
         results: results.slice(0, 10),
