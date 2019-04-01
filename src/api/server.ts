@@ -3,6 +3,7 @@ import { setupAirbnbRoute } from "./airbnb/airbnb-server";
 import { setupGeocodeRoute } from "./geocode/geocode-server";
 import { setupOSMRoute } from "./overpass/overpass-server";
 import { setupGeneralApiRoute } from "./general-api-server";
+import enforce from "express-sslify";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
 
@@ -18,6 +19,7 @@ setupGeocodeRoute(apiRouter);
 setupOSMRoute(apiRouter);
 setupGeneralApiRoute(apiRouter);
 
+app.use(enforce.HTTPS());
 app.use(express.static("build"));
 app.use(bodyParser.json());
 
