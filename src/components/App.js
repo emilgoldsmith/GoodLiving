@@ -199,6 +199,17 @@ class App extends Component {
   updateMap = debounce(750, async event => {
     this.setState({ loading: true });
     try {
+      if (this.map.getZoom() < 10) {
+        // Zoomed out too far. TODO: we should notify user somehow
+        this.setState({
+          loading: false,
+          hasLoadedFirstTime: true,
+          results: [],
+          nearData: []
+        });
+        return;
+      }
+
       const bounds = this.map.getBounds();
       const { lng: swLong, lat: swLat } = bounds.getSouthWest();
       const { lng: neLong, lat: neLat } = bounds.getNorthEast();
