@@ -13,6 +13,7 @@ import * as _ from "lodash";
 import { debounce } from "throttle-debounce";
 import * as Modal from "react-modal";
 import Spinner from "./Spinner";
+import browserDetect from "browser-detect";
 import ChooseDistanceModal, {
   metersToDisplayString
 } from "./ChooseDistanceModal";
@@ -23,6 +24,14 @@ NumericInput.style["input:not(.form-control)"] = {};
 // Overwriting default styles of Modal
 Modal.defaultStyles.overlay.zIndex = 1000000000000000;
 Modal.setAppElement("#root");
+
+const browserInfo = browserDetect();
+
+if (browserInfo.name !== "chrome" && browserInfo.name !== "firefox") {
+  window.alert(
+    "We currently only officially support the Chrome and Firefox browsers so bugs may appear in the browser you are currently using"
+  );
+}
 
 const OldFilter = ({ iconType }) => {
   let icon, description;
