@@ -43,14 +43,16 @@ export default class MainInput extends Component {
       //   }
       // ]
     };
+    // Initializes generateSuggestions
+    this.resetDebounce();
   }
 
   setTemplate = newTemplate => this.setState({ currentTemplate: newTemplate });
 
   searchLocation = async query => {
+    this.clearSuggestions();
     const results = await geocode(query);
     this.props.moveMap(results[0].boundingbox);
-    this.clearSuggestions();
   };
 
   handleInputSubmit = event => {
@@ -67,7 +69,7 @@ export default class MainInput extends Component {
     );
   };
 
-  generateSuggestions = debounce(500, async () => {
+  handleGenerateSuggestions = async () => {
     // const suggestions = getTreeSuggestions(query.split(" ").filter(x => x));
     // const stringSuggestions = suggestions.map(
     //   x => x.stringValue || x.placeholder
@@ -83,13 +85,20 @@ export default class MainInput extends Component {
         longitude: singleResult.lon
       }))
     });
-  });
+  };
+
+  resetDebounce = () => {
+    if (this.generateSuggestions) this.generateSuggestions.cancel();
+    // Cancel disables it forever so we recreate a new non-cancelled one. Otherwise we would have to fork the module to create a new method
+    this.generateSuggestions = debounce(500, this.handleGenerateSuggestions);
+  };
 
   clearSuggestions = () => {
     this.setState({
       suggestions: [],
       inputValue: ""
     });
+    this.resetDebounce();
   };
 
   render() {
