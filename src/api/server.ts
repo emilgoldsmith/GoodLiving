@@ -3,7 +3,6 @@ import { setupAirbnbRoute } from "./airbnb/airbnb-server";
 import { setupGeocodeRoute } from "./geocode/geocode-server";
 import { setupOSMRoute } from "./overpass/overpass-server";
 import { setupGeneralApiRoute } from "./general-api-server";
-import enforce from "express-sslify";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
 
@@ -19,7 +18,15 @@ setupGeocodeRoute(apiRouter);
 setupOSMRoute(apiRouter);
 setupGeneralApiRoute(apiRouter);
 
-app.use(enforce.HTTPS());
+/* Redirect http to https */
+app.get("*", function(req, res, next) {
+  if (
+    req.headers["x-forwarded-proto"] != "https" &&
+    process.env.NODE_ENV === "production"
+  )
+    res.redirect("https://" + req.hostname + req.url);
+  else next(); /* Continue to other routes if we're not redirecting */
+});
 app.use(express.static("build"));
 app.use(bodyParser.json());
 
