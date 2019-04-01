@@ -522,7 +522,7 @@ class App extends Component {
                     parse={x => (x.match(/(\d+)/) && x.match(/(\d+)/)[1]) || 1}
                     value={this.state.numGuests}
                     onChange={this.handleGuestsChanged}
-                    size="5"
+                    size={browserInfo.name === "chrome" ? 10 : 5}
                   />
                   <Range
                     className={styles.reactRange}
