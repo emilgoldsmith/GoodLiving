@@ -5,6 +5,7 @@
 
 .input {
   height: 2em;
+  min-width: 200px; // Should at min include text
   max-width: inherit;
 }
 
