@@ -493,12 +493,19 @@ class App extends Component {
         <div className={styles.mapContainer}>
           <div className={styles.map} id="map" />
           <div className={styles.mapOverlayContainer}>
-            {this.isTooZoomedOut() && (
+            {(this.isTooZoomedOut() && (
               <div className={styles.userNotification}>
                 There is too much data at this zoom level, please zoom in closer
                 for us to show you results
               </div>
-            )}
+            )) ||
+              (this.state.hasLoadedFirstTime &&
+                this.state.results.length === 0 && (
+                  <div className={styles.userNotification}>
+                    There are no results, try zooming out or relaxing your
+                    constraints
+                  </div>
+                ))}
             <div className={styles.topContainer}>
               <MainInput moveMap={this.moveMap} />
               <div
