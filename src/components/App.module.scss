@@ -150,6 +150,12 @@
   align-items: flex-start;
 }
 
+.filterHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
 .filtersContainer {
   display: flex;
   flex-wrap: wrap;

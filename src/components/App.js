@@ -644,7 +644,19 @@ class App extends Component {
             )}
           </div>
           <div className={styles.filterSection}>
-            <h2>Filters</h2>
+            <div className={styles.filterHeader}>
+              <h2>Filters</h2>
+              <button
+                onClick={() =>
+                  this.setState(
+                    { nearbyFilters: [], amenityFilters: [] },
+                    this.updateMap
+                  )
+                }
+              >
+                Clear Filters
+              </button>
+            </div>
             {this.state.nearbyFilters.length +
               this.state.amenityFilters.length >
             0 ? (
