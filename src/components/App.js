@@ -252,7 +252,7 @@ class App extends Component {
       }
       this.updateResults(results);
       this.setState({
-        results: results.slice(0, 10),
+        results: results.slice(0, 20),
         nearData: this.formatOSMData(OSMData),
         loading: false,
         hasLoadedFirstTime: true
