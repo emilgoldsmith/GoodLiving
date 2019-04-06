@@ -547,22 +547,27 @@ class App extends Component {
                     onChange={this.handleGuestsChanged}
                     size={browserInfo.name === "chrome" ? 10 : 5}
                   />
-                  <Range
-                    className={styles.reactRange}
-                    min={0}
-                    max={1000}
-                    count={1}
-                    pushable
-                    value={[this.state.minPrice, this.state.maxPrice]}
-                    onChange={this.handlePriceChanged}
-                    marks={{
-                      0: "0$",
-                      250: "250$",
-                      500: "500$",
-                      750: "750$",
-                      1000: "1000$"
-                    }}
-                  />
+                  <div className={styles.reactRange}>
+                    <div className={styles.priceInterval}>
+                      {this.state.minPrice}$ - {this.state.maxPrice}$
+                    </div>
+                    <Range
+                      className={styles.reactRange}
+                      min={0}
+                      max={1000}
+                      count={1}
+                      pushable
+                      value={[this.state.minPrice, this.state.maxPrice]}
+                      onChange={this.handlePriceChanged}
+                      marks={{
+                        0: "0$",
+                        250: "250$",
+                        500: "500$",
+                        750: "750$",
+                        1000: "1000$"
+                      }}
+                    />
+                  </div>
                   <select
                     value={this.state.roomType}
                     onChange={this.handleRoomTypeChanged}
