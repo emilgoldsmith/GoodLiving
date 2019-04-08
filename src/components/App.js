@@ -114,7 +114,9 @@ const PropertyResult = ({
   subtitle,
   listingId,
   priceString,
-  isPopup
+  isPopup,
+  highlightMarker,
+  resetMarker
 }) => {
   let x = 0;
   return (
@@ -125,6 +127,8 @@ const PropertyResult = ({
       target="_blank"
       rel="noopener noreferrer"
       href={`https://www.airbnb.com/rooms/${listingId}`}
+      onMouseOver={() => highlightMarker && highlightMarker()}
+      onMouseOut={() => resetMarker && resetMarker()}
     >
       {/* <div className={styles.propertyAttributesContainer}>
         <h1>Attributes</h1>
@@ -178,23 +182,37 @@ class App extends Component {
     this.map.fitBounds(latLngBounds);
   };
 
+  highlightMarker = marker => {
+    this.markers.forEach(x => x !== marker && x.setOpacity(0.15));
+  };
+
+  restoreMarkerOpacities = () => {
+    this.markers.forEach(x => x.setOpacity(1));
+  };
+
   updateResults = listings => {
     this.markers.forEach(oldMarker => oldMarker.remove());
     this.markers = listings.map(singleLocation =>
-      L.marker([singleLocation.latitude, singleLocation.longitude])
-        .bindPopup(
-          renderToStaticMarkup(
-            <PropertyResult
-              title={singleLocation.title}
-              subtitle={singleLocation.type}
-              previewUrl={singleLocation.picture}
-              listingId={singleLocation.id}
-              priceString={singleLocation.priceString}
-              isPopup
-            />
-          )
+      Object.assign(
+        L.marker(
+          [singleLocation.latitude, singleLocation.longitude],
+          L.icon({ ...L.Icon.Default.prototype.options })
         )
-        .addTo(this.map)
+          .bindPopup(
+            renderToStaticMarkup(
+              <PropertyResult
+                title={singleLocation.title}
+                subtitle={singleLocation.type}
+                previewUrl={singleLocation.picture}
+                listingId={singleLocation.id}
+                priceString={singleLocation.priceString}
+                isPopup
+              />
+            )
+          )
+          .addTo(this.map),
+        { listingId: singleLocation.id }
+      )
     );
     this.setState(state => ({
       amenities: _.uniq(
@@ -635,6 +653,11 @@ class App extends Component {
                     key={`${result.title} ${result.latitude} ${
                       result.longitude
                     }`}
+                    highlightMarker={this.highlightMarker.bind(
+                      this,
+                      this.markers.find(x => x.listingId === result.id)
+                    )}
+                    resetMarker={this.restoreMarkerOpacities}
                   />
                 ))}
               </div>
