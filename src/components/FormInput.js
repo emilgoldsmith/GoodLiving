@@ -94,6 +94,11 @@ export default class FormInput extends Component {
           placeholder={this.props.placeholder}
           onChange={e => this.setState({ inputValue: e.target.value })}
           onFocus={() => this.setState({ displaySuggestions: true })}
+          onKeyUp={e =>
+            e.key === "Enter" &&
+            suggestions.length > 0 &&
+            suggestions[0].props.onClick()
+          }
         />
         {this.state.displaySuggestions && (
           <div className={styles.suggestionsContainer}>
