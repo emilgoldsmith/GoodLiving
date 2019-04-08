@@ -33,38 +33,38 @@ if (browserInfo.name !== "chrome" && browserInfo.name !== "firefox") {
   );
 }
 
-const OldFilter = ({ iconType }) => {
-  let icon, description;
-  switch (iconType) {
-    case "gym":
-      icon = (
-        <div className={`${styles.iconContainer} ${styles.gymIcon}`}>
-          <i className="fas fa-dumbbell" />
-        </div>
-      );
-      description = (
-        <span>
-          Gym Within <input type="number" defaultValue={500} />m
-        </span>
-      );
-      break;
+// const OldFilter = ({ iconType }) => {
+//   let icon, description;
+//   switch (iconType) {
+//     case "gym":
+//       icon = (
+//         <div className={`${styles.iconContainer} ${styles.gymIcon}`}>
+//           <i className="fas fa-dumbbell" />
+//         </div>
+//       );
+//       description = (
+//         <span>
+//           Gym Within <input type="number" defaultValue={500} />m
+//         </span>
+//       );
+//       break;
 
-    default:
-      throw new Error("Invalid iconType");
-  }
+//     default:
+//       throw new Error("Invalid iconType");
+//   }
 
-  return (
-    <div className={styles.oldFilter}>
-      {icon}
-      {description}
-      <div className={styles.growingFlex}>
-        <button className={styles.unstyledButton}>
-          <i className="fas fa-times" />
-        </button>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className={styles.oldFilter}>
+//       {icon}
+//       {description}
+//       <div className={styles.growingFlex}>
+//         <button className={styles.unstyledButton}>
+//           <i className="fas fa-times" />
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
 
 class Filter extends Component {
   remove = () => this.props.removeFilter(this.props.filterValue);
@@ -118,7 +118,6 @@ const PropertyResult = ({
   highlightMarker,
   resetMarker
 }) => {
-  let x = 0;
   return (
     <a
       className={`${styles.propertyResult}${
