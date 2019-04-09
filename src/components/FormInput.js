@@ -49,17 +49,45 @@ export default class FormInput extends Component {
   render() {
     const suggestionLevel = this.getSuggestionLevel();
 
-    const suggestionData =
+    const defaultSuggestionData =
       suggestionLevel instanceof Array
         ? _.values(suggestionLevel)
         : _.keys(suggestionLevel);
 
-    const getStringValue = val => (val._meta ? val.value : val);
+    const getStringValue = val => (val._meta || val._display ? val.value : val);
+    const getDisplayValue = val =>
+      val._display ? val._display : _.startCase(getStringValue(val));
+
+    const getChildrenValues = obj => {
+      if (obj instanceof Array)
+        return obj.map(x => ({
+          ...(typeof x === "string" ? { value: x } : x),
+          _display: `: ${getDisplayValue(x)}`
+        }));
+      return _.map(obj, (val, key) =>
+        getChildrenValues(val).map(x => ({
+          ...x,
+          _display: `${_.startCase(key)}${val instanceof Array ? "" : "->"}${
+            x._display
+          }`
+        }))
+      ).reduce((x, y) => x.concat(y));
+    };
+    // Only consider recursive suggestions if user has input a query and there's something to recurse on
+    const advancedSuggestionData =
+      this.state.inputValue &&
+      !(suggestionLevel instanceof Array) &&
+      defaultSuggestionData.concat(getChildrenValues(suggestionLevel));
+
+    const suggestionData = advancedSuggestionData || defaultSuggestionData;
 
     const suggestions = _.uniqBy(suggestionData, val =>
       getStringValue(val).toLowerCase()
     )
       .sort((a, b) => {
+        // Non direct values come last
+        if (a._display && !b._display) return 1;
+        if (!a._display && b._display) return -1;
         a = getStringValue(a).toLowerCase();
         b = getStringValue(b).toLowerCase();
         if (a < b) return -1;
@@ -82,7 +110,7 @@ export default class FormInput extends Component {
             x._meta
           )}
         >
-          {_.startCase(getStringValue(x))}
+          {getDisplayValue(x)}
         </div>
       ));
 
