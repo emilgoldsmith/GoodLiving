@@ -17,9 +17,9 @@ export default class FormInput extends Component {
       ? _.get(this.props.data, this.state.suggestionPath)
       : this.props.data;
 
-  handleSuggestionClick = (val, meta) => {
+  handleSuggestionClick = (val, meta, isShortcutValue) => {
     const suggestionLevel = this.getSuggestionLevel();
-    if (suggestionLevel instanceof Array) {
+    if (suggestionLevel instanceof Array || isShortcutValue) {
       this.props.addFilter(val, meta);
       this.setState({
         inputValue: "",
@@ -107,7 +107,8 @@ export default class FormInput extends Component {
           onClick={this.handleSuggestionClick.bind(
             this,
             getStringValue(x),
-            x._meta
+            x._meta,
+            x._display
           )}
         >
           {getDisplayValue(x)}
