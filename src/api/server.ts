@@ -5,7 +5,7 @@ import { setupOSMRoute } from "./overpass/overpass-server";
 import { setupGeneralApiRoute } from "./general-api-server";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
-import * as MobileDetect from "mobile-detect";
+import * as detectBrowser from "browser-detect";
 
 dotenv.config();
 
@@ -21,8 +21,9 @@ setupGeneralApiRoute(apiRouter);
 
 /* Let user know we don't support mobile devices */
 app.get("*", (req, res, next) => {
-  const md = new MobileDetect(req.headers["user-agent"]);
-  if (md.mobile()) {
+  // @ts-ignore
+  const browserResult = detectBrowser(req.headers["user-agent"]);
+  if (browserResult.mobile) {
     res
       .status(200)
       .send(

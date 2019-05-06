@@ -20,7 +20,6 @@
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "geolib": "^2.0.24",
-    "mobile-detect": "^1.4.3",
     "moment": "^2.24.0",
     "node-sass": "^4.9.3",
     "omit-deep-lodash": "^1.1.3",
