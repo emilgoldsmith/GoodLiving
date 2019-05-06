@@ -5,7 +5,7 @@ import { setupOSMRoute } from "./overpass/overpass-server";
 import { setupGeneralApiRoute } from "./general-api-server";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
-import * as detectBrowser from "browser-detect";
+import detectBrowser from "browser-detect";
 
 dotenv.config();
 
