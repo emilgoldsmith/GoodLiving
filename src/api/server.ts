@@ -5,6 +5,7 @@ import { setupOSMRoute } from "./overpass/overpass-server";
 import { setupGeneralApiRoute } from "./general-api-server";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
+import * as MobileDetect from "mobile-detect";
 
 dotenv.config();
 
@@ -18,6 +19,19 @@ setupGeocodeRoute(apiRouter);
 setupOSMRoute(apiRouter);
 setupGeneralApiRoute(apiRouter);
 
+/* Let user know we don't support mobile devices */
+app.get("*", (req, res, next) => {
+  const md = new MobileDetect(req.headers["user-agent"]);
+  if (md.mobile()) {
+    res
+      .status(200)
+      .send(
+        "Sorry, we currently do not support mobile devices. Please try again from a laptop or desktop to access this site"
+      );
+  } else {
+    next();
+  }
+});
 /* Redirect http to https */
 app.get("*", function(req, res, next) {
   if (
