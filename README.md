@@ -1,3 +1,52 @@
+# GoodLiving
+
+This version of GoodLiving was developed as a part of the Capstone Project of Emil Goldsmith Olesen. In this repository you will find the code for this, and the Capstone Paper can be found in [documents/](./documents/GoodLiving - Capstone Paper.pdf).
+
+## Development
+
+To install dependencies first run
+
+```
+yarn
+```
+> NOTE: It is of course assumed that you have already installed the package manager yarn first
+
+To run a local version of the website you will need to run two processes (assumed in separate shells though this is of course optional)
+
+To run the front-end, run
+
+```
+yarn dev
+```
+
+which is auto-reloading, so any changes you make to the front end will automatically be applied and rebuilt
+
+Then to run the API you will need to run
+
+```
+yarn dev-api
+```
+
+which is not hot reloading so this command will need to be restarted every time a change is made.
+
+## Deployment
+
+This app is already setup to auto deploy on Heroku, so other than creating an account and linking it to a github repo with this source code (whether this one or a fork) should automatically work. Otherwise you simply run `yarn build` after installing dependencies and then `yarn start` will run the api, but an api that also serves the HTML/javascript of the app all in one. The only reason for the two processes above is for the reloading capabilities it gives the front end.
+
+## Handover
+
+If you are taking over this project, you should first of all know that it was built with the main parts of the stack being React, Node.js, Express and some Typescript. It was bootstrapped with Create React App, and below this custom part of the README the default README from Create React App is included with all the links etc. If you are not familiar with these technologies you may want to read up on them a bit.
+
+At the end of the capstone paper linked to above (which is found in ./documents), there are sections with user feedback and suggested further work, especially these sections of the paper are highly recommended to read as they sum up a lot of the takeaways we got from the work we did on this project, though you of course have complete freedom to pick and choose which advice/suggestions you want to take.
+
+While there is definitely some structure to the code, and it is far from pure spaghetti code, due to the nature of prototyping and prioritizing fast development of new features to be able to test them, some parts of the code are a bit more messy than they could be. Especially the `app.js` file could without a doubt use some modularization. I apologize for this, but would also recommend trying to go through the codebase and do some refactors as one of your first tasks. Not only will it be good for the code, but I at least also always find it a really good way to acquaint myself with a new codebase, and take ownership of it, knowing exactly where everything is.
+
+Good Luck, and feel free to contact me if you have any questions!
+
+---
+
+# Create React App Documentation
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
