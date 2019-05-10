@@ -1,6 +1,6 @@
 # GoodLiving
 
-This version of GoodLiving was developed as a part of the Capstone Project of Emil Goldsmith Olesen. In this repository you will find the code for this, and the Capstone Paper can be found in [documents/](./documents/GoodLiving - Capstone Paper.pdf).
+This version of GoodLiving was developed as a part of the Capstone Project of Emil Goldsmith Olesen. In this repository you will find the code for this, and the Capstone Paper can be found in [documents/](./documents/GoodLiving%20-%20Capstone%20Paper.pdf).
 
 ## Development
 
